@@ -16,7 +16,7 @@ cat <<EOF > /etc/ld.so.conf.d/nvidia.conf
 /opt/nvidia/lib32
 EOF
 
-if [ ! -f /etc/ld.so.conf ] || [ "$(grep 'include /etc/ld\.so\.conf\.d/\*\.conf')" = '' ]; then
+if [ ! -f /etc/ld.so.conf ] || [ "$(grep 'include /etc/ld\.so\.conf\.d/\*\.conf' /etc/ld.so.conf )" = '' ]; then
   cat <<EOF >> /etc/ld.so.conf
 include /etc/ld.so.conf.d/*.conf
 EOF
@@ -38,16 +38,6 @@ if [ "$INSTALLER" = '' ]; then
     exit 0
   fi
 fi
-
-## If installer is found, first disable nouveau driver
-echo -e "\e[33m\xe2\x8f\xb3 Disabling nouveau Driver ...\e[m"
-if [ ! -d /etc/modprobe.d ]; then
-  mkdir /etc/modprobe.d
-fi
-cat <<EOF > /etc/modprobe.d/disable-nouveau.conf
-blacklist nouveau
-options nouveau modeset=0
-EOF
 
 ## Install the NVIDIA driver with advanced options below
 ## Note that --no-nvidia-modprobe is deleted so that CUDA could work correctly
