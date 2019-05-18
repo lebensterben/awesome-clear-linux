@@ -44,6 +44,7 @@ fi
 echo -e "\e[33m\xe2\x8f\xb3 Installing NVIDIA proprietary Driver now ... \e[m"
 echo -e "\e[32mIf the installation is successful, GUI may automatically start.\e[m"
 echo -e "\e[32mPlease run the post_install.sh to validate that the nvidia kernel modules are loaded.\e[m"
+read -p "Press any key to continue... " -n1 -s
 sh "$INSTALLER" \
    --utility-prefix=/opt/nvidia \
    --opengl-prefix=/opt/nvidia \
