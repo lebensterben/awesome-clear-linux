@@ -157,7 +157,7 @@ It’s sourced by
 In summary, this project is going to achieve the following:
 
 1. All system-wide default startup files stay in `/usr/share/defaults/etc/profile`,  where
-   - `/usr/share/defaults/etc/profile` is responsible for setting up environment variables and provide extended functionalities such as command completions. It shall also execute different blocks based on the shell, which is acquired by `echo $0`, so that it’s compatible to all of `sh`, `bash`, and `zsh`.
+   - `/usr/share/defaults/etc/profile` is responsible for setting up environment variables and provide extended functionalities such as command completions. It shall also execute different blocks based on the shell, which could be determined according to certain envirionment variables, so that it’s compatible to all of `sh`, `bash`, and `zsh`.
    - `/usr/share/defaults/etc/profile` is directly sourced by `sh` and `bash`, while it’s sourced by `zsh` via `/usr/share/defaults/etc/zshenv`.
    - `/usr/share/defaults/etc/profile` additionally takes admin overrides from `/etc/profile` and `/etc/profile.d/*`.
    - `/usr/share/defaults/etc/bash.bashrc` shall source `/usr/share/defaults/profile` and does nothing else.

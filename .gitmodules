@@ -1,0 +1,3 @@
+[submodule "TidyShell/filesystem"]
+	path = TidyShell/filesystem
+	url = git@github.com:clearlinux-pkgs/filesystem.git
