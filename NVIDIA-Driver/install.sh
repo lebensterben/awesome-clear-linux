@@ -32,7 +32,7 @@ if [ "$INSTALLER" = '' ]; then
   if [ "$INSTALLER" = '' ]; then
     echo -e "\e[31m\xe2\x9d\x8c Cannot find NVIDIA-Linux-x86_64-<VERSION>.run under current directory or ~/Downloads\e[m"
     echo -e "\e[32mBelow are all display adapters currently identified on your current system:\e[m"
-    echo -e "\e[32m$(sudo lshw -C display | command grep product | sed -r 's/.*product: /\t/g' | uniq)\e[m"
+    echo -e "\e[32m$(sudo lshw -C display | grep product | sed -r 's/.*product: /\t/g' | uniq)\e[m"
     echo -e "\e[32mPlease download the appropriate driver and re-run this install.sh script.\e[m"
     xdg-open https://www.nvidia.com/download/index.aspx
     exit 0

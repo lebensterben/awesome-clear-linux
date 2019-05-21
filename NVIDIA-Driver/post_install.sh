@@ -8,7 +8,7 @@ fi
 
 ## Validate that nvidia kernel modules are loaded
 echo -e "\e[33m\xe2\x8f\xb3 Making sure NVIDIA kernel modules are loaded...\e[32m"
-lsmod | command grep ^nvidia
+lsmod | grep ^nvidia
 
 ## Verify and fix OpenGL library files files that are likely modified by NVIDIA installer
 echo -e "\e[33m\xe2\x8f\xb3 Verifying the integrity of OpenGL library files...\e[m"
