@@ -1,0 +1,7 @@
+* Tasks for the CUDA Branch
+** TODO Add `/opt/nvidia` to path
+** CUDA installation tutorial
+*** TODO install c-extras-gcc7 bundle
+*** TODO install CUDA 10.0
+*** TODO install other utilities
+** TODO Add GreenEyeEnvy tutorial
