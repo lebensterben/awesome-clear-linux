@@ -1,0 +1,781 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2019-05-26 Sun 02:45 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>TidyShell</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Lucius Hu" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/styles/readtheorg/css/htmlize.css"/><link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/styles/readtheorg/css/readtheorg.css"/><script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script><script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script><script type="text/javascript" src="https://fniessen.github.io/org-html-themes/styles/lib/js/jquery.stickytableheaders.min.js"></script><script type="text/javascript" src="https://fniessen.github.io/org-html-themes/styles/readtheorg/js/readtheorg.js"></script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2019 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">TidyShell</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org7557f4d">1. Overview</a></li>
+<li><a href="#org13536e8">2. Loading process of startup files</a>
+<ul>
+<li><a href="#orgee1dba0">2.1. Login shell:</a>
+<ul>
+<li><a href="#org20fcbe5">2.1.1. Text Mode</a></li>
+<li><a href="#org6b07172">2.1.2. Graphical Mode</a></li>
+</ul>
+</li>
+<li><a href="#org20a514c">2.2. Interactive Shell</a>
+<ul>
+<li><a href="#orgfaf3f6a">2.2.1. <code>bash</code></a></li>
+<li><a href="#orge785eb8">2.2.2. <code>zsh</code></a></li>
+</ul>
+</li>
+<li><a href="#org80f3011">2.3. Non-interactive Shell</a>
+<ul>
+<li><a href="#org2743df9">2.3.1. <code>bash</code></a></li>
+<li><a href="#orgc2e6dcd">2.3.2. <code>zsh</code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org503971f">3. Current default startup files</a>
+<ul>
+<li>
+<ul>
+<li><a href="#org7cc8fdb">3.0.1. <code>/usr/share/defaults/etc/profile</code></a></li>
+<li><a href="#org2363316">3.0.2. <code>~/.profile</code></a></li>
+<li><a href="#org4dccd74">3.0.3. <code>/usr/share/defaults/etc/bash.bashrc</code></a></li>
+<li><a href="#org2745f8f">3.0.4. <code>~/.bashrc</code></a></li>
+<li><a href="#org72052b6">3.0.5. <code>/usr/share/defaults/etc/zshenv</code></a></li>
+<li><a href="#orga99ef89">3.0.6. <code>/usr/share/defaults/etc/zshrc</code></a></li>
+<li><a href="#org3f41dd9">3.0.7. <code>/usr/share/defaults/etc/zlogin</code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org4cff0b7">4. Goal</a></li>
+<li><a href="#org6049b51">5. Limitations</a></li>
+<li><a href="#orgf9b7ef0">6. References</a></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org7557f4d" class="outline-2">
+<h2 id="org7557f4d"><span class="section-number-2">1</span> Overview</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Currently, the shell default shell startup files for <code>sh</code> (Bourne shell, aliased to <code>bash</code> and thus would be omitted in the following discussion), <code>bash</code> (Bash), and <code>zsh</code> (Z Shell) are rather messy in the sense that:
+</p>
+
+<ul class="org-ul">
+<li>The environment variables are different for <code>bash</code> and <code>zsh</code>.</li>
+<li>Some functionalities are not available for <code>zsh</code> while it's feasible to achieve them in <code>zsh</code>.</li>
+<li>Startup files are sourcing each other, and in some cases the same startup files would be sourced for multiple times.</li>
+<li><code>zsh</code> has an entirely different set of startup files as oppose to <code>sh</code> and <code>bash</code>, but actually most statement in the startup files are compatible to all of the three shells. This may result in inconsistency when future a future update changed startup files for one <code>bash</code>, while such change is not incorporated into <code>zsh</code>, or vice versa.</li>
+<li>The default global startup files are stored in <code>/usr/share/defaults/etc/</code>, and an average user may not be aware of them, as many distributions have the system-wide default startup files stored in <code>/etc</code>.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org13536e8" class="outline-2">
+<h2 id="org13536e8"><span class="section-number-2">2</span> Loading process of startup files</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+A summary of how the startup files are processed on Clear Linux (Version 29480) is given below:
+</p>
+</div>
+
+<div id="outline-container-orgee1dba0" class="outline-3">
+<h3 id="orgee1dba0"><span class="section-number-3">2.1</span> Login shell:</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+Depending on whether the Linux OS boots into text mode or graphical mode, the concept of login shell would be different.
+</p>
+</div>
+
+<div id="outline-container-org20fcbe5" class="outline-4">
+<h4 id="org20fcbe5"><span class="section-number-4">2.1.1</span> Text Mode</h4>
+<div class="outline-text-4" id="text-2-1-1">
+<p>
+If the user is first presented with a login prompt, and after he successfully log in to a user account the shell prompt appears, then it's <b>text mode</b>.
+</p>
+
+<p>
+The shell he is presented to is the <b>login shell</b>, which could be changed via <code>chsh</code> or <code>lchsh</code>. And any sub-process of login shell would inherit the environment variables of the login shell. In particular, if the user invoked another shell either by directly executing a shell program, by using commands such as <code>su</code>, <code>sudo</code>, or by executing a shell script, the invoked shell would inherit the environment variables of the login shell. Thus correctly setting environment variables for the login shell would ensure that they would also be set for any shell invoked after login, while the user is still able to override those environment variables directly or startup files of (interactive) shells.
+</p>
+</div>
+
+<ol class="org-ol">
+<li><a id="org7ebb849"></a><code>bash</code><br />
+<div class="outline-text-5" id="text-2-1-1-1">
+<p>
+The <code>bash</code> login shell first looks for the global profile at <code>/usr/share/defaults/etc/profile</code>. Next it tries to locate a per-user profile at <code>~/.bash_profile</code>, <code>~/.bash_login</code>, and <code>~/.profile</code>, where the first one found, in that order, is sourced. By default, only <code>~/.profile</code> exists.
+</p>
+
+<p>
+In addition, when a <code>bash</code> login shell exits, it will source per-user logout script at <code>~/.bash_logout</code>, which is not created by default.
+</p>
+</div>
+</li>
+
+<li><a id="org6b0fb62"></a><code>zsh</code><br />
+<div class="outline-text-5" id="text-2-1-1-2">
+<p>
+A <code>zsh</code> login shell will source three types of startup files, i.e. <code>zshenv</code>, <code>zprofile</code>, and <code>zlogin</code>, in that order. For each of the five types, <code>zsh</code> would look for a global configuration in <code>/usr/share/defaults/etc/&lt;TYPE&gt;</code>, and then the user's configuration in <code>~/.&lt;TYPE&gt;</code>.
+</p>
+
+<p>
+Similar to <code>bash</code>, when a <code>zsh</code> process exits, it will source a logout script, <code>~/.zlogout</code>.
+</p>
+
+<p>
+Currently, the default global <code>env</code>, <code>zshrc</code>, and <code>zlogin</code> are created, but no local startup file is created.
+</p>
+</div>
+</li>
+</ol>
+</div>
+
+<div id="outline-container-org6b07172" class="outline-4">
+<h4 id="org6b07172"><span class="section-number-4">2.1.2</span> Graphical Mode</h4>
+<div class="outline-text-4" id="text-2-1-2">
+<p>
+If the user has a graphical display manager, such as <code>gdm</code>, installed and enabled, the user would be presented with a graphical user interface where he can choose an desktop environment for the session, and finish the authentication process to log in to a user account. This is called <code>Graphical Mode</code>.
+</p>
+
+<p>
+Unlike the text mode, neither <code>bash</code> nor <code>zsh</code> is the actual login shell. So the loading sequence of startup files described above might not be valid. Take <code>gdm</code> as an example, it is <code>/usr/libexec/gdm-x-session</code> that acts as a login shell, in the sense that every process started after login is a sub-process of it.
+</p>
+
+<p>
+What startup files the graphical session will source is complicated, and it varies by both the choice of display manager, and the distribution. In the case of <code>gdm</code>, <code>/usr/share/gdm/Xsession</code> defines that <code>gdm-x-session</code> should source the followings files:
+</p>
+
+<ul class="org-ul">
+<li><code>/etc/profile</code>, which is system-wide profile in many <i>other distribution</i>, but a <i>admin override profile</i> in Clear Linux.</li>
+<li><code>/usr/share/defaults/etc/profile</code>, the default system-wide profile in Clear Linux</li>
+<li><code>~/.profile</code>, the per-user profile</li>
+<li><code>/etc/xprofile</code>, system-wide X specific setups</li>
+<li><code>~/.xprofile</code>, per-user X specific setups</li>
+</ul>
+
+<p>
+By default, only <code>/usr/share/defaults/etc/profile</code> and <code>~/.profile</code> exits, therefore the the startup process is the same as the default bahaviour of a <code>bash</code> login shell.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org20a514c" class="outline-3">
+<h3 id="org20a514c"><span class="section-number-3">2.2</span> Interactive Shell</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+When a user starts a terminal emulator, the shell launched in the terminal is a interactive shell. Also, the login shell in the text mode is interactive as well.
+</p>
+</div>
+
+<div id="outline-container-orgfaf3f6a" class="outline-4">
+<h4 id="orgfaf3f6a"><span class="section-number-4">2.2.1</span> <code>bash</code></h4>
+<div class="outline-text-4" id="text-2-2-1">
+<p>
+<code>bash</code> interactive shell first source the global <code>bash</code> configuration at <code>/usr/share/defaults/etc/bash.bashrc</code> and then the user configuration at <code>~/.bashrc</code>. Both files exits after installation of <code>bash</code>.
+</p>
+
+<p>
+If it's also a login shell, then these two configurations would be sourced at last.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orge785eb8" class="outline-4">
+<h4 id="orge785eb8"><span class="section-number-4">2.2.2</span> <code>zsh</code></h4>
+<div class="outline-text-4" id="text-2-2-2">
+<p>
+<code>zsh</code> interactive shell will source <code>zshenv</code> and <code>zshrc</code> files at <code>/usr/share/defaults/etc/&lt;TYPE&gt;</code> and <code>~/.&lt;TYPE&gt;</code> respectively. Only the system-wide <code>env</code> and <code>zshrc</code> exists after installing of <code>zsh</code>.
+</p>
+
+<p>
+If it's also a login shell, then <code>zshrc</code> files are sourced after <code>zprofile</code>, and before <code>zlogin</code>, if any of them exists.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org80f3011" class="outline-3">
+<h3 id="org80f3011"><span class="section-number-3">2.3</span> Non-interactive Shell</h3>
+<div class="outline-text-3" id="text-2-3">
+<p>
+When a shell program is called upon by another process to read and execute a shell script, then the shell program is in non-interactive mode.
+</p>
+</div>
+
+<div id="outline-container-org2743df9" class="outline-4">
+<h4 id="org2743df9"><span class="section-number-4">2.3.1</span> <code>bash</code></h4>
+<div class="outline-text-4" id="text-2-3-1">
+<p>
+A non-interactive <code>bash</code> shell won't source <code>bashrc</code> files, and in fact unless it is invoked by <code>bash --login</code>, it won't source any startup files.
+</p>
+
+<p>
+If <code>--login</code> option is specified, then <code>bashrc</code> files won't be sourced, but all other <code>bash</code> startup files mentioned above will be sourced.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgc2e6dcd" class="outline-4">
+<h4 id="orgc2e6dcd"><span class="section-number-4">2.3.2</span> <code>zsh</code></h4>
+<div class="outline-text-4" id="text-2-3-2">
+<p>
+Similar to <code>bash</code>, a non-interactive <code>zsh</code> shell won't source <code>zshrc</code> regardless of whether it's login shell or not.
+</p>
+
+<p>
+If it's login shell, i.e if it's invoked with <code>--login</code> option, then it also sources <code>zprofile</code> and <code>zlogin</code> during startup.
+</p>
+
+<p>
+But there's one thing worth to mention, any <code>zsh</code> instance sources <code>zshenv</code> files. Thus even for a non-login, non-interactive <code>zsh</code> shell, <code>zshenv</code> files are still sourced.
+</p>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org503971f" class="outline-2">
+<h2 id="org503971f"><span class="section-number-2">3</span> Current default startup files</h2>
+<div class="outline-text-2" id="text-3">
+</div>
+<div id="outline-container-org7cc8fdb" class="outline-4">
+<h4 id="org7cc8fdb"><span class="section-number-4">3.0.1</span> <code>/usr/share/defaults/etc/profile</code></h4>
+<div class="outline-text-4" id="text-3-0-1">
+<p>
+This file sets various environment variables, determines the appearance of the prompt, and sources the shell scripts under <code>/usr/share/defaults/etc/profile.d/</code>, which are created by default. And the system admin could make overrides by creating <code>/etc/profile</code>, and putting scripts under <code>/etc/profile.d/</code>, which would be sourced by <code>/usr/share/defaults/etc/profile</code>.
+</p>
+
+<p>
+This file is sourced by
+</p>
+<ul class="org-ul">
+<li><code>bash</code> login shell for twice, where the second time is via <code>~/.profile</code></li>
+<li><code>bash</code> non-login shell for twice, via <code>/usr/share/defaults/etc/bash.bashrc</code> and <code>~/.bashrc</code> respectively.</li>
+<li><code>/usr/share/gdm/Xsession</code> for twice if a graphical display manager is launched, where the second time is via <code>~/.profile</code></li>
+</ul>
+</div>
+
+<ol class="org-ol">
+<li><a id="org253e525"></a><code>/usr/share/defaults/etc/profile.d/*</code><br />
+<div class="outline-text-5" id="text-3-0-1-1">
+<p>
+There are 7 files in this directory and they're sourced by <code>/usr/share/defaults/etc/profile</code>.
+</p>
+<ul class="org-ul">
+<li><code>10-command-not-found.sh</code>, provides similar functionality as <code>command-not-found</code> in <code>Ubuntu</code>.</li>
+<li><code>50-swupd.bash</code>, provides auto-completion of <code>swupd</code> for <code>bash</code>.</li>
+<li><code>bash_completion.sh</code> provides auto-completion for <code>bash</code>.
+<ul class="org-ul">
+<li><p>
+The simple script below shows the number of command completion that is unique for <code>zsh</code>, unique for <code>bash</code>, and common for both shells, respectively. Currently, there numbers are 764, 455, and 149. Though <code>zsh</code> ships with more auto-completions than <code>bash</code> has, but sourcing the <code>bash</code> completions does extend ~zsh~‘s functionality.
+</p>
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #2aa1ae; background-color: #292e34;">#</span><span style="color: #2aa1ae; background-color: #292e34;">!/usr/bin/</span><span style="color: #4f97d7; font-weight: bold;">zsh</span>
+<span style="color: #7590db;">zsh</span>=<span style="color: #2d9574;">"$(find /usr/share/zsh -path '*/functions/_*' |</span>
+<span style="color: #2d9574;">     sort |</span>
+<span style="color: #2d9574;">     sed -e 's/.*functions\/_//')"</span>
+<span style="color: #7590db;">bash</span>=<span style="color: #2d9574;">"$(find /usr/share/bash-completion/completions/ -not -type l -not -name '_*' |</span>
+<span style="color: #2d9574;">      sed -e 's/.*completions\///g' |</span>
+<span style="color: #2d9574;">      sort)"</span>
+comm -23 &lt;<span style="color: #4f97d7;">(</span><span style="color: #4f97d7;">echo</span> $<span style="color: #7590db;">zsh</span><span style="color: #4f97d7;">)</span> &lt;<span style="color: #4f97d7;">(</span><span style="color: #4f97d7;">echo</span> $<span style="color: #7590db;">bash</span><span style="color: #4f97d7;">)</span> | wc -l
+comm -13 &lt;<span style="color: #4f97d7;">(</span><span style="color: #4f97d7;">echo</span> $<span style="color: #7590db;">zsh</span><span style="color: #4f97d7;">)</span> &lt;<span style="color: #4f97d7;">(</span><span style="color: #4f97d7;">echo</span> $<span style="color: #7590db;">bash</span><span style="color: #4f97d7;">)</span> | wc -l
+comm -12 &lt;<span style="color: #4f97d7;">(</span><span style="color: #4f97d7;">echo</span> $<span style="color: #7590db;">zsh</span><span style="color: #4f97d7;">)</span> &lt;<span style="color: #4f97d7;">(</span><span style="color: #4f97d7;">echo</span> $<span style="color: #7590db;">bash</span><span style="color: #4f97d7;">)</span> | wc -l
+</pre>
+</div>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-right">764</td>
+</tr>
+
+<tr>
+<td class="org-right">455</td>
+</tr>
+
+<tr>
+<td class="org-right">149</td>
+</tr>
+</tbody>
+</table></li>
+</ul></li>
+
+<li><code>50-colors.sh</code> colourise the output of <code>ls</code> command, and also set the colours for GCC compilation flags.</li>
+<li><code>50-prompt</code> colourise the prompt defined in  <code>/usr/share/defaults/etc/profile</code>.</li>
+<li><code>ccache.sh</code> add <code>/usr/lib64/ccache/bin</code> to accelerate GCC compilation.</li>
+<li><code>flatpak.sh</code> sets up directories so that apps installed via <code>flatpak</code> would correctly show up in <code>gnome</code>.</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+
+<div id="outline-container-org2363316" class="outline-4">
+<h4 id="org2363316"><span class="section-number-4">3.0.2</span> <code>~/.profile</code></h4>
+<div class="outline-text-4" id="text-3-0-2">
+<p>
+It sources <code>~/.bashrc</code>, which sources <code>/usr/share/defaults/etc/profile</code>. Thus its redundant.
+</p>
+
+<p>
+This file is sourced by
+</p>
+<ul class="org-ul">
+<li><code>bash</code> login shell (when neither <code>~/.bash_profile</code> nor <code>~/.bash_login</code> is available, which is the default)</li>
+<li><code>/usr/share/gdm/Xsession</code> in graphical mode</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org4dccd74" class="outline-4">
+<h4 id="org4dccd74"><span class="section-number-4">3.0.3</span> <code>/usr/share/defaults/etc/bash.bashrc</code></h4>
+<div class="outline-text-4" id="text-3-0-3">
+<p>
+It sources the global profile <code>/usr/share/defaults/etc/profile</code>. It also allow admin overrides by sourcing <code>/etc/profile</code>, which is redundant since <code>/usr/share/defaults/etc/profile</code> already did that.
+</p>
+
+<p>
+It's sourced by
+</p>
+<ul class="org-ul">
+<li><code>bash</code> non-login shell for twice, where the second time is via <code>~/.bashrc</code></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org2745f8f" class="outline-4">
+<h4 id="org2745f8f"><span class="section-number-4">3.0.4</span> <code>~/.bashrc</code></h4>
+<div class="outline-text-4" id="text-3-0-4">
+<p>
+Has identical contents as <code>/usr/share/defaults/etc/bash.bashrc</code> has, which makes it redundant.
+</p>
+
+<p>
+It's sourced by
+</p>
+<ul class="org-ul">
+<li><code>bash</code> non-login shell</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org72052b6" class="outline-4">
+<h4 id="org72052b6"><span class="section-number-4">3.0.5</span> <code>/usr/share/defaults/etc/zshenv</code></h4>
+<div class="outline-text-4" id="text-3-0-5">
+<p>
+It sets environment variables whose majority is identical to those set by <code>/usr/share/defaults/etc/profile</code>. It also allows admin overrides by sourcing <code>/etc/zshenv</code>
+</p>
+
+<p>
+But notice that, various GCC flags and the <code>PATH</code> are not exactly the same, in <code>Version 29480</code>.
+</p>
+
+<p>
+It's sourced by
+</p>
+<ul class="org-ul">
+<li><code>zsh</code> login shell</li>
+<li><code>zsh</code> non-login shell</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orga99ef89" class="outline-4">
+<h4 id="orga99ef89"><span class="section-number-4">3.0.6</span> <code>/usr/share/defaults/etc/zshrc</code></h4>
+<div class="outline-text-4" id="text-3-0-6">
+<p>
+It sets aliases, keybindings, and the prompt for <code>zsh</code> shell.
+</p>
+
+<p>
+It's sourced by
+</p>
+<ul class="org-ul">
+<li><code>zsh</code> login shell</li>
+<li><code>zsh</code> non-login shell</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org3f41dd9" class="outline-4">
+<h4 id="org3f41dd9"><span class="section-number-4">3.0.7</span> <code>/usr/share/defaults/etc/zlogin</code></h4>
+<div class="outline-text-4" id="text-3-0-7">
+<p>
+It does not do anything except sourcing <code>/etc/zlogin</code> to allow admin overrides.
+</p>
+
+<p>
+It's sourced by
+</p>
+<ul class="org-ul">
+<li><code>zsh</code> login shell</li>
+<li><code>zsh</code> non-login shell</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org4cff0b7" class="outline-2">
+<h2 id="org4cff0b7"><span class="section-number-2">4</span> Goal</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+In summary, this project aims to achieve the following:
+</p>
+
+<ol class="org-ol">
+<li>System-wide defaults shall be defined in <code>/usr/share/defaults/etc/profile</code> only.
+<ul class="org-ul">
+<li>First, it's responsible for setting up environment variables for login shell and <code>xsession</code>, and therefore all of their sub-processes will inherit those environment variables.
+<ul class="org-ul">
+<li>By default, this file is sourced by <code>bash</code> login shell, and <code>gdm</code>'s <code>xsession</code>.</li>
+<li><code>bash</code> and <code>gdm</code> would also source <code>~/.profile</code>, but we shall not source <code>/usr/share/defaults/etc/profile</code> in it.</li>
+<li><code>zsh</code>'s login shell would source <code>zshenv</code>, <code>zprofile</code>, <code>zshrc</code>, <code>zlogin</code>.
+<ul class="org-ul">
+<li><code>zshenv</code> shall be avoided because it's sourced for all <code>zsh</code> instances.</li>
+<li><code>zlogin</code> is sourced after <code>zshrc</code>, where people tends to make customization. To ensure compatibility, we'd not use <code>zlogin</code>, but <code>zprofile</code> instead, which is sourced before <code>zshrc</code></li>
+<li><code>zprofile</code> shall source <code>/usr/share/defaults/etc/profile</code>, and  this is how we ensure the consistency.</li>
+<li>To sum up, we only needs to source <code>/usr/share/defaults/etc/profile</code> in <code>/usr/share/defaults/etc/zprofile</code></li>
+</ul></li>
+</ul></li>
+<li>Second, it provides additional features to interactive shells:
+<ul class="org-ul">
+<li><p>
+Depending on the shell, the implementation of various functionalities would be slightly different. To determine the type of shell, we can use the following code block.
+</p>
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #2aa1ae; background-color: #292e34;">#</span><span style="color: #2aa1ae; background-color: #292e34;">!/usr/bin/</span><span style="color: #4f97d7; font-weight: bold;">sh</span>
+<span style="color: #4f97d7; font-weight: bold;">case</span> <span style="color: #2d9574;">"$(ps -o comm= $$)"</span><span style="color: #4f97d7; font-weight: bold;"> in</span>
+  sh) <span style="color: #4f97d7;">echo</span> <span style="color: #2d9574;">'sh'</span>;;
+  bash) <span style="color: #4f97d7;">echo</span> <span style="color: #2d9574;">'bash'</span>;;
+  zsh) <span style="color: #4f97d7;">echo</span> <span style="color: #2d9574;">'zsh'</span>;;
+  *) <span style="color: #4f97d7;">echo</span> <span style="color: #2d9574;">'UNKNOWN'</span>;;
+<span style="color: #4f97d7; font-weight: bold;">esac</span>
+</pre>
+</div>
+
+<pre class="example">
+zsh
+</pre></li>
+
+<li><p>
+The following test could determine whether a shell is interactive, which works for <code>sh</code>, <code>bash</code>, and <code>zsh</code>. For example, when running the following code block as an shell script, it must be non-interactive. But if the <i>shebang</i> specified the <code>-i</code> option to <code>bash</code>, it forces the shell script to be executed by a interactive shell.
+</p>
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #2aa1ae; background-color: #292e34;">#</span><span style="color: #2aa1ae; background-color: #292e34;">!/usr/bin/</span><span style="color: #4f97d7; font-weight: bold;">bash</span>
+<span style="color: #4f97d7;">[</span> -n <span style="color: #2d9574;">"$(echo $- | grep i)"</span> <span style="color: #4f97d7;">]</span> &amp;&amp; <span style="color: #4f97d7;">echo</span> <span style="color: #2d9574;">'interactive'</span> || <span style="color: #4f97d7;">echo</span> <span style="color: #2d9574;">'non-interactive'</span>
+</pre>
+</div>
+
+<pre class="example">
+non-interactive
+</pre>
+
+
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #2aa1ae; background-color: #292e34;">#</span><span style="color: #2aa1ae; background-color: #292e34;">!/usr/bin/</span><span style="color: #4f97d7; font-weight: bold;">bash</span><span style="color: #2aa1ae; background-color: #292e34;"> -i</span>
+<span style="color: #4f97d7;">[</span> -n <span style="color: #2d9574;">"$(echo $- | grep i)"</span> <span style="color: #4f97d7;">]</span> &amp;&amp; <span style="color: #4f97d7;">echo</span> <span style="color: #2d9574;">'interactive'</span> || <span style="color: #4f97d7;">echo</span> <span style="color: #2d9574;">'non-interactive'</span>
+</pre>
+</div>
+
+<pre class="example">
+non-interactive
+</pre></li>
+
+<li>This is more reliable than checking the existence of environment variables such as <code>$BASH_VERSION</code> and <code>$ZSH_VERSION</code>. Consider the case where the parent process is a <code>zsh</code> shell, and the user launched a <code>bash</code> shell in <code>zsh</code>, then both <code>$BASH_VERSION</code> and <code>$ZSH_VERSION</code> are available. Nevertheless, these version variables are helpful as some features maybe version-specific.</li>
+<li><p>
+In particular, it's very easy to use the existing <code>bash</code> completions in <code>zsh</code> by executing the following first
+</p>
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #2aa1ae; background-color: #292e34;">#</span><span style="color: #2aa1ae; background-color: #292e34;">!/usr/bin/</span><span style="color: #4f97d7; font-weight: bold;">zsh</span>
+<span style="color: #4f97d7;">autoload</span> -U +X compinit &amp;&amp; compinit
+<span style="color: #4f97d7;">autoload</span> -U +X bashcompinit &amp;&amp; bashcompinit
+</pre>
+</div></li>
+</ul></li>
+</ul></li>
+<li>Per-user defaults shall be left empty, but with information regarding the location of system-wide defaults in <code>/usr/share/defaults/etc/</code>, and the <code>/etc/</code> directory where system admins could override the system-wide defaults.</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-org6049b51" class="outline-2">
+<h2 id="org6049b51"><span class="section-number-2">5</span> Limitations</h2>
+<div class="outline-text-2" id="text-5">
+<ul class="org-ul">
+<li>Only <code>bash/sh</code> and <code>zsh</code> are taken into account, while <code>fish</code> is not, which is also defined in <code>/usr/share/defauls/etc/shells</code>.</li>
+<li>Only one graphical display manager, <code>gdm</code>, has been tested.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgf9b7ef0" class="outline-2">
+<h2 id="orgf9b7ef0"><span class="section-number-2">6</span> References</h2>
+<div class="outline-text-2" id="text-6">
+<ul class="org-ul">
+<li><a href="https://wiki.archlinux.org/index.php/Bash#Invocation">ArchWiki - Bash</a></li>
+<li><a href="https://wiki.archlinux.org/index.php/Zsh#Startup/Shutdown_files">ArchWiki - Zsh</a></li>
+<li><a href="http://zsh.sourceforge.net/Guide/zshguide02.html">A User's Guide to the Z-Shell - Ch. 2 What to put in your startup files</a></li>
+<li><a href="https://www.gnu.org/software/bash/manual/bash.html#Bash-Startup-Files">Bash Reference Manual - 6.2 Bash Startup Files</a></li>
+<li><a href="https://mywiki.wooledge.org/DotFiles">Configuring your login sessions with dot files</a></li>
+<li><a href="https://unix.stackexchange.com/a/110744/117088">How would I detect a non-login shell? (In Zsh)</a></li>
+<li><a href="https://mywiki.wooledge.org/ProcessManagement#theory">Process Management: On processes, environments and inheritance</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Lucius Hu</p>
+<p class="date">Created: 2019-05-26 Sun 02:45</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+<script>window.klipse_settings = {selector_eval_html: '.src-html',
+                             selector_eval_js: '.src-js',
+                             selector_eval_python_client: '.src-python',
+                             selector_eval_scheme: '.src-scheme',
+                             selector: '.src-clojure',
+                             selector_eval_ruby: '.src-ruby'};</script><script src="https://storage.googleapis.com/app.klipse.tech/plugin_prod/js/klipse_plugin.min.js"></script><link rel="stylesheet" type="text/css" href="https://storage.googleapis.com/app.klipse.tech/css/codemirror.css"/></body>
+</html>
