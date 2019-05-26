@@ -1,7 +1,9 @@
 #+TITLE: Scripts for installing NVIDIA Proprietary Driver on Clear Linux
-Based on the [[https://clearlinux.org/documentation/clear-linux/tutorials/nvidia][tutorial by Clear Linux]], I wrote four bash scripts that automate the installation, and uninstallation, of NVIDIA proprietary driver.
+#+AUTHOR: Lucius Hu
+** Introduction
+   Based on the [[https://clearlinux.org/documentation/clear-linux/tutorials/nvidia][tutorial by Clear Linux]], I wrote four bash scripts that automate the installation, and uninstallation, of NVIDIA proprietary driver.
 
-By design, all of them needs =root= privilege to be executed. Therefore there's no need to change their permission to make them executable.
+   By design, all of them needs =root= privilege to be executed. Therefore there's no need to change their permission to make them executable.
 
 *** 1. =pre_install.sh=
 - Installs =kernel-native-dkms= or =kernel-lts-dkms= bundle based on your kernel type
@@ -45,8 +47,6 @@ By design, all of them needs =root= privilege to be executed. Therefore there's 
 - Uninstalls NVIDIA proprietary driver via the official uninstaller, =/opt/nvidia/bin/nvidia-uninstall=.
 - Remind the user to reboot after uninstallation.
 
-#+AUTHOR: Lucius HU
-** Introduction
 ** Known Issues
 - It's been reported that ~gnome-control-center~ will not work due to incorrect =libGL=[fn:1].
 - If there is a integrated GPU on Intel Chip-set, the user has to disable the Intel VGA driver, or otherwise he will see the following error message[fn:2].
