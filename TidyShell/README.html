@@ -3,10 +3,10 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-05-26 Sun 02:00 -->
+<!-- 2019-05-26 Sun 02:45 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>README</title>
+<title>TidyShell</title>
 <meta name="generator" content="Org mode" />
 <meta name="author" content="Lucius Hu" />
 <style type="text/css">
@@ -243,56 +243,57 @@ for the JavaScript code in this tag.
 </head>
 <body>
 <div id="content">
-<h1 class="title">README</h1>
+<h1 class="title">TidyShell</h1>
 <div id="table-of-contents">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org83b02a7">1. Overview</a></li>
-<li><a href="#org121cd9f">2. Loading process of startup files</a>
+<li><a href="#org7557f4d">1. Overview</a></li>
+<li><a href="#org13536e8">2. Loading process of startup files</a>
 <ul>
-<li><a href="#org0183c6e">2.1. Login shell:</a>
+<li><a href="#orgee1dba0">2.1. Login shell:</a>
 <ul>
-<li><a href="#org83b1c55">2.1.1. Text Mode</a></li>
-<li><a href="#org1acd614">2.1.2. Graphical Mode</a></li>
+<li><a href="#org20fcbe5">2.1.1. Text Mode</a></li>
+<li><a href="#org6b07172">2.1.2. Graphical Mode</a></li>
 </ul>
 </li>
-<li><a href="#org1e20896">2.2. Interactive Shell</a>
+<li><a href="#org20a514c">2.2. Interactive Shell</a>
 <ul>
-<li><a href="#org34e6829">2.2.1. <code>bash</code></a></li>
-<li><a href="#orgdf95190">2.2.2. <code>zsh</code></a></li>
+<li><a href="#orgfaf3f6a">2.2.1. <code>bash</code></a></li>
+<li><a href="#orge785eb8">2.2.2. <code>zsh</code></a></li>
 </ul>
 </li>
-<li><a href="#org189292b">2.3. Non-interactive Shell</a>
+<li><a href="#org80f3011">2.3. Non-interactive Shell</a>
 <ul>
-<li><a href="#org3624976">2.3.1. <code>bash</code></a></li>
-<li><a href="#orgdf30848">2.3.2. <code>zsh</code></a></li>
+<li><a href="#org2743df9">2.3.1. <code>bash</code></a></li>
+<li><a href="#orgc2e6dcd">2.3.2. <code>zsh</code></a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#org0e34f8d">3. Current default startup files</a>
+<li><a href="#org503971f">3. Current default startup files</a>
 <ul>
 <li>
 <ul>
-<li><a href="#orgeac3c21">3.0.1. <code>/usr/share/defaults/etc/profile</code></a></li>
-<li><a href="#org06869d0">3.0.2. <code>~/.profile</code></a></li>
-<li><a href="#orgcc03fd2">3.0.3. <code>/usr/share/defaults/etc/bash.bashrc</code></a></li>
-<li><a href="#org165e084">3.0.4. <code>~/.bashrc</code></a></li>
-<li><a href="#org744da4c">3.0.5. <code>/usr/share/defaults/etc/zshenv</code></a></li>
-<li><a href="#org12bdcb3">3.0.6. <code>/usr/share/defaults/etc/zshrc</code></a></li>
-<li><a href="#org64a2402">3.0.7. <code>/usr/share/defaults/etc/zlogin</code></a></li>
+<li><a href="#org7cc8fdb">3.0.1. <code>/usr/share/defaults/etc/profile</code></a></li>
+<li><a href="#org2363316">3.0.2. <code>~/.profile</code></a></li>
+<li><a href="#org4dccd74">3.0.3. <code>/usr/share/defaults/etc/bash.bashrc</code></a></li>
+<li><a href="#org2745f8f">3.0.4. <code>~/.bashrc</code></a></li>
+<li><a href="#org72052b6">3.0.5. <code>/usr/share/defaults/etc/zshenv</code></a></li>
+<li><a href="#orga99ef89">3.0.6. <code>/usr/share/defaults/etc/zshrc</code></a></li>
+<li><a href="#org3f41dd9">3.0.7. <code>/usr/share/defaults/etc/zlogin</code></a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#orga769950">4. Goal</a></li>
-<li><a href="#org85b9736">5. Limitations</a></li>
+<li><a href="#org4cff0b7">4. Goal</a></li>
+<li><a href="#org6049b51">5. Limitations</a></li>
+<li><a href="#orgf9b7ef0">6. References</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org83b02a7" class="outline-2">
-<h2 id="org83b02a7"><span class="section-number-2">1</span> Overview</h2>
+<div id="outline-container-org7557f4d" class="outline-2">
+<h2 id="org7557f4d"><span class="section-number-2">1</span> Overview</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Currently, the shell default shell startup files for <code>sh</code> (Bourne shell, aliased to <code>bash</code> and thus would be omitted in the following discussion), <code>bash</code> (Bash), and <code>zsh</code> (Z Shell) are rather messy in the sense that:
@@ -308,24 +309,24 @@ Currently, the shell default shell startup files for <code>sh</code> (Bourne she
 </div>
 </div>
 
-<div id="outline-container-org121cd9f" class="outline-2">
-<h2 id="org121cd9f"><span class="section-number-2">2</span> Loading process of startup files</h2>
+<div id="outline-container-org13536e8" class="outline-2">
+<h2 id="org13536e8"><span class="section-number-2">2</span> Loading process of startup files</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 A summary of how the startup files are processed on Clear Linux (Version 29480) is given below:
 </p>
 </div>
 
-<div id="outline-container-org0183c6e" class="outline-3">
-<h3 id="org0183c6e"><span class="section-number-3">2.1</span> Login shell:</h3>
+<div id="outline-container-orgee1dba0" class="outline-3">
+<h3 id="orgee1dba0"><span class="section-number-3">2.1</span> Login shell:</h3>
 <div class="outline-text-3" id="text-2-1">
 <p>
 Depending on whether the Linux OS boots into text mode or graphical mode, the concept of login shell would be different.
 </p>
 </div>
 
-<div id="outline-container-org83b1c55" class="outline-4">
-<h4 id="org83b1c55"><span class="section-number-4">2.1.1</span> Text Mode</h4>
+<div id="outline-container-org20fcbe5" class="outline-4">
+<h4 id="org20fcbe5"><span class="section-number-4">2.1.1</span> Text Mode</h4>
 <div class="outline-text-4" id="text-2-1-1">
 <p>
 If the user is first presented with a login prompt, and after he successfully log in to a user account the shell prompt appears, then it's <b>text mode</b>.
@@ -337,7 +338,7 @@ The shell he is presented to is the <b>login shell</b>, which could be changed v
 </div>
 
 <ol class="org-ol">
-<li><a id="orgc360a06"></a><code>bash</code><br />
+<li><a id="org7ebb849"></a><code>bash</code><br />
 <div class="outline-text-5" id="text-2-1-1-1">
 <p>
 The <code>bash</code> login shell first looks for the global profile at <code>/usr/share/defaults/etc/profile</code>. Next it tries to locate a per-user profile at <code>~/.bash_profile</code>, <code>~/.bash_login</code>, and <code>~/.profile</code>, where the first one found, in that order, is sourced. By default, only <code>~/.profile</code> exists.
@@ -349,7 +350,7 @@ In addition, when a <code>bash</code> login shell exits, it will source per-user
 </div>
 </li>
 
-<li><a id="org2d00603"></a><code>zsh</code><br />
+<li><a id="org6b0fb62"></a><code>zsh</code><br />
 <div class="outline-text-5" id="text-2-1-1-2">
 <p>
 A <code>zsh</code> login shell will source three types of startup files, i.e. <code>zshenv</code>, <code>zprofile</code>, and <code>zlogin</code>, in that order. For each of the five types, <code>zsh</code> would look for a global configuration in <code>/usr/share/defaults/etc/&lt;TYPE&gt;</code>, and then the user's configuration in <code>~/.&lt;TYPE&gt;</code>.
@@ -367,8 +368,8 @@ Currently, the default global <code>env</code>, <code>zshrc</code>, and <code>zl
 </ol>
 </div>
 
-<div id="outline-container-org1acd614" class="outline-4">
-<h4 id="org1acd614"><span class="section-number-4">2.1.2</span> Graphical Mode</h4>
+<div id="outline-container-org6b07172" class="outline-4">
+<h4 id="org6b07172"><span class="section-number-4">2.1.2</span> Graphical Mode</h4>
 <div class="outline-text-4" id="text-2-1-2">
 <p>
 If the user has a graphical display manager, such as <code>gdm</code>, installed and enabled, the user would be presented with a graphical user interface where he can choose an desktop environment for the session, and finish the authentication process to log in to a user account. This is called <code>Graphical Mode</code>.
@@ -397,16 +398,16 @@ By default, only <code>/usr/share/defaults/etc/profile</code> and <code>~/.profi
 </div>
 </div>
 
-<div id="outline-container-org1e20896" class="outline-3">
-<h3 id="org1e20896"><span class="section-number-3">2.2</span> Interactive Shell</h3>
+<div id="outline-container-org20a514c" class="outline-3">
+<h3 id="org20a514c"><span class="section-number-3">2.2</span> Interactive Shell</h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
 When a user starts a terminal emulator, the shell launched in the terminal is a interactive shell. Also, the login shell in the text mode is interactive as well.
 </p>
 </div>
 
-<div id="outline-container-org34e6829" class="outline-4">
-<h4 id="org34e6829"><span class="section-number-4">2.2.1</span> <code>bash</code></h4>
+<div id="outline-container-orgfaf3f6a" class="outline-4">
+<h4 id="orgfaf3f6a"><span class="section-number-4">2.2.1</span> <code>bash</code></h4>
 <div class="outline-text-4" id="text-2-2-1">
 <p>
 <code>bash</code> interactive shell first source the global <code>bash</code> configuration at <code>/usr/share/defaults/etc/bash.bashrc</code> and then the user configuration at <code>~/.bashrc</code>. Both files exits after installation of <code>bash</code>.
@@ -418,8 +419,8 @@ If it's also a login shell, then these two configurations would be sourced at la
 </div>
 </div>
 
-<div id="outline-container-orgdf95190" class="outline-4">
-<h4 id="orgdf95190"><span class="section-number-4">2.2.2</span> <code>zsh</code></h4>
+<div id="outline-container-orge785eb8" class="outline-4">
+<h4 id="orge785eb8"><span class="section-number-4">2.2.2</span> <code>zsh</code></h4>
 <div class="outline-text-4" id="text-2-2-2">
 <p>
 <code>zsh</code> interactive shell will source <code>zshenv</code> and <code>zshrc</code> files at <code>/usr/share/defaults/etc/&lt;TYPE&gt;</code> and <code>~/.&lt;TYPE&gt;</code> respectively. Only the system-wide <code>env</code> and <code>zshrc</code> exists after installing of <code>zsh</code>.
@@ -432,16 +433,16 @@ If it's also a login shell, then <code>zshrc</code> files are sourced after <cod
 </div>
 </div>
 
-<div id="outline-container-org189292b" class="outline-3">
-<h3 id="org189292b"><span class="section-number-3">2.3</span> Non-interactive Shell</h3>
+<div id="outline-container-org80f3011" class="outline-3">
+<h3 id="org80f3011"><span class="section-number-3">2.3</span> Non-interactive Shell</h3>
 <div class="outline-text-3" id="text-2-3">
 <p>
 When a shell program is called upon by another process to read and execute a shell script, then the shell program is in non-interactive mode.
 </p>
 </div>
 
-<div id="outline-container-org3624976" class="outline-4">
-<h4 id="org3624976"><span class="section-number-4">2.3.1</span> <code>bash</code></h4>
+<div id="outline-container-org2743df9" class="outline-4">
+<h4 id="org2743df9"><span class="section-number-4">2.3.1</span> <code>bash</code></h4>
 <div class="outline-text-4" id="text-2-3-1">
 <p>
 A non-interactive <code>bash</code> shell won't source <code>bashrc</code> files, and in fact unless it is invoked by <code>bash --login</code>, it won't source any startup files.
@@ -453,8 +454,8 @@ If <code>--login</code> option is specified, then <code>bashrc</code> files won'
 </div>
 </div>
 
-<div id="outline-container-orgdf30848" class="outline-4">
-<h4 id="orgdf30848"><span class="section-number-4">2.3.2</span> <code>zsh</code></h4>
+<div id="outline-container-orgc2e6dcd" class="outline-4">
+<h4 id="orgc2e6dcd"><span class="section-number-4">2.3.2</span> <code>zsh</code></h4>
 <div class="outline-text-4" id="text-2-3-2">
 <p>
 Similar to <code>bash</code>, a non-interactive <code>zsh</code> shell won't source <code>zshrc</code> regardless of whether it's login shell or not.
@@ -472,12 +473,12 @@ But there's one thing worth to mention, any <code>zsh</code> instance sources <c
 </div>
 </div>
 
-<div id="outline-container-org0e34f8d" class="outline-2">
-<h2 id="org0e34f8d"><span class="section-number-2">3</span> Current default startup files</h2>
+<div id="outline-container-org503971f" class="outline-2">
+<h2 id="org503971f"><span class="section-number-2">3</span> Current default startup files</h2>
 <div class="outline-text-2" id="text-3">
 </div>
-<div id="outline-container-orgeac3c21" class="outline-4">
-<h4 id="orgeac3c21"><span class="section-number-4">3.0.1</span> <code>/usr/share/defaults/etc/profile</code></h4>
+<div id="outline-container-org7cc8fdb" class="outline-4">
+<h4 id="org7cc8fdb"><span class="section-number-4">3.0.1</span> <code>/usr/share/defaults/etc/profile</code></h4>
 <div class="outline-text-4" id="text-3-0-1">
 <p>
 This file sets various environment variables, determines the appearance of the prompt, and sources the shell scripts under <code>/usr/share/defaults/etc/profile.d/</code>, which are created by default. And the system admin could make overrides by creating <code>/etc/profile</code>, and putting scripts under <code>/etc/profile.d/</code>, which would be sourced by <code>/usr/share/defaults/etc/profile</code>.
@@ -486,7 +487,6 @@ This file sets various environment variables, determines the appearance of the p
 <p>
 This file is sourced by
 </p>
-
 <ul class="org-ul">
 <li><code>bash</code> login shell for twice, where the second time is via <code>~/.profile</code></li>
 <li><code>bash</code> non-login shell for twice, via <code>/usr/share/defaults/etc/bash.bashrc</code> and <code>~/.bashrc</code> respectively.</li>
@@ -495,31 +495,27 @@ This file is sourced by
 </div>
 
 <ol class="org-ol">
-<li><a id="org6ced35e"></a><code>/usr/share/defaults/etc/profile.d/*</code><br />
+<li><a id="org253e525"></a><code>/usr/share/defaults/etc/profile.d/*</code><br />
 <div class="outline-text-5" id="text-3-0-1-1">
 <p>
 There are 7 files in this directory and they're sourced by <code>/usr/share/defaults/etc/profile</code>.
 </p>
-
 <ul class="org-ul">
 <li><code>10-command-not-found.sh</code>, provides similar functionality as <code>command-not-found</code> in <code>Ubuntu</code>.</li>
 <li><code>50-swupd.bash</code>, provides auto-completion of <code>swupd</code> for <code>bash</code>.</li>
-<li><p>
-<code>bash_completion.sh</code> provides auto-completion for <code>bash</code>.
-</p>
-
+<li><code>bash_completion.sh</code> provides auto-completion for <code>bash</code>.
 <ul class="org-ul">
-<li>The simple script below shows the number of command completion that is unique for <code>zsh</code>, unique for <code>bash</code>, and common for both shells, respectively. Currently, there numbers are 764, 455, and 149. Though <code>zsh</code> ships with more auto-completions than <code>bash</code> has, but sourcing the <code>bash</code> completions does extend ~zsh~‘s functionality.</li>
-</ul>
-
+<li><p>
+The simple script below shows the number of command completion that is unique for <code>zsh</code>, unique for <code>bash</code>, and common for both shells, respectively. Currently, there numbers are 764, 455, and 149. Though <code>zsh</code> ships with more auto-completions than <code>bash</code> has, but sourcing the <code>bash</code> completions does extend ~zsh~‘s functionality.
+</p>
 <div class="org-src-container">
 <pre class="src src-shell"><span style="color: #2aa1ae; background-color: #292e34;">#</span><span style="color: #2aa1ae; background-color: #292e34;">!/usr/bin/</span><span style="color: #4f97d7; font-weight: bold;">zsh</span>
 <span style="color: #7590db;">zsh</span>=<span style="color: #2d9574;">"$(find /usr/share/zsh -path '*/functions/_*' |</span>
-<span style="color: #2d9574;">       sort |</span>
-<span style="color: #2d9574;">       sed -e 's/.*functions\/_//')"</span>
+<span style="color: #2d9574;">     sort |</span>
+<span style="color: #2d9574;">     sed -e 's/.*functions\/_//')"</span>
 <span style="color: #7590db;">bash</span>=<span style="color: #2d9574;">"$(find /usr/share/bash-completion/completions/ -not -type l -not -name '_*' |</span>
-<span style="color: #2d9574;">        sed -e 's/.*completions\///g' |</span>
-<span style="color: #2d9574;">        sort)"</span>
+<span style="color: #2d9574;">      sed -e 's/.*completions\///g' |</span>
+<span style="color: #2d9574;">      sort)"</span>
 comm -23 &lt;<span style="color: #4f97d7;">(</span><span style="color: #4f97d7;">echo</span> $<span style="color: #7590db;">zsh</span><span style="color: #4f97d7;">)</span> &lt;<span style="color: #4f97d7;">(</span><span style="color: #4f97d7;">echo</span> $<span style="color: #7590db;">bash</span><span style="color: #4f97d7;">)</span> | wc -l
 comm -13 &lt;<span style="color: #4f97d7;">(</span><span style="color: #4f97d7;">echo</span> $<span style="color: #7590db;">zsh</span><span style="color: #4f97d7;">)</span> &lt;<span style="color: #4f97d7;">(</span><span style="color: #4f97d7;">echo</span> $<span style="color: #7590db;">bash</span><span style="color: #4f97d7;">)</span> | wc -l
 comm -12 &lt;<span style="color: #4f97d7;">(</span><span style="color: #4f97d7;">echo</span> $<span style="color: #7590db;">zsh</span><span style="color: #4f97d7;">)</span> &lt;<span style="color: #4f97d7;">(</span><span style="color: #4f97d7;">echo</span> $<span style="color: #7590db;">bash</span><span style="color: #4f97d7;">)</span> | wc -l
@@ -546,13 +542,11 @@ comm -12 &lt;<span style="color: #4f97d7;">(</span><span style="color: #4f97d7;"
 </tr>
 </tbody>
 </table></li>
+</ul></li>
 
 <li><code>50-colors.sh</code> colourise the output of <code>ls</code> command, and also set the colours for GCC compilation flags.</li>
-
 <li><code>50-prompt</code> colourise the prompt defined in  <code>/usr/share/defaults/etc/profile</code>.</li>
-
 <li><code>ccache.sh</code> add <code>/usr/lib64/ccache/bin</code> to accelerate GCC compilation.</li>
-
 <li><code>flatpak.sh</code> sets up directories so that apps installed via <code>flatpak</code> would correctly show up in <code>gnome</code>.</li>
 </ul>
 </div>
@@ -560,8 +554,8 @@ comm -12 &lt;<span style="color: #4f97d7;">(</span><span style="color: #4f97d7;"
 </ol>
 </div>
 
-<div id="outline-container-org06869d0" class="outline-4">
-<h4 id="org06869d0"><span class="section-number-4">3.0.2</span> <code>~/.profile</code></h4>
+<div id="outline-container-org2363316" class="outline-4">
+<h4 id="org2363316"><span class="section-number-4">3.0.2</span> <code>~/.profile</code></h4>
 <div class="outline-text-4" id="text-3-0-2">
 <p>
 It sources <code>~/.bashrc</code>, which sources <code>/usr/share/defaults/etc/profile</code>. Thus its redundant.
@@ -570,7 +564,6 @@ It sources <code>~/.bashrc</code>, which sources <code>/usr/share/defaults/etc/p
 <p>
 This file is sourced by
 </p>
-
 <ul class="org-ul">
 <li><code>bash</code> login shell (when neither <code>~/.bash_profile</code> nor <code>~/.bash_login</code> is available, which is the default)</li>
 <li><code>/usr/share/gdm/Xsession</code> in graphical mode</li>
@@ -578,8 +571,8 @@ This file is sourced by
 </div>
 </div>
 
-<div id="outline-container-orgcc03fd2" class="outline-4">
-<h4 id="orgcc03fd2"><span class="section-number-4">3.0.3</span> <code>/usr/share/defaults/etc/bash.bashrc</code></h4>
+<div id="outline-container-org4dccd74" class="outline-4">
+<h4 id="org4dccd74"><span class="section-number-4">3.0.3</span> <code>/usr/share/defaults/etc/bash.bashrc</code></h4>
 <div class="outline-text-4" id="text-3-0-3">
 <p>
 It sources the global profile <code>/usr/share/defaults/etc/profile</code>. It also allow admin overrides by sourcing <code>/etc/profile</code>, which is redundant since <code>/usr/share/defaults/etc/profile</code> already did that.
@@ -588,15 +581,14 @@ It sources the global profile <code>/usr/share/defaults/etc/profile</code>. It a
 <p>
 It's sourced by
 </p>
-
 <ul class="org-ul">
 <li><code>bash</code> non-login shell for twice, where the second time is via <code>~/.bashrc</code></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org165e084" class="outline-4">
-<h4 id="org165e084"><span class="section-number-4">3.0.4</span> <code>~/.bashrc</code></h4>
+<div id="outline-container-org2745f8f" class="outline-4">
+<h4 id="org2745f8f"><span class="section-number-4">3.0.4</span> <code>~/.bashrc</code></h4>
 <div class="outline-text-4" id="text-3-0-4">
 <p>
 Has identical contents as <code>/usr/share/defaults/etc/bash.bashrc</code> has, which makes it redundant.
@@ -605,15 +597,14 @@ Has identical contents as <code>/usr/share/defaults/etc/bash.bashrc</code> has, 
 <p>
 It's sourced by
 </p>
-
 <ul class="org-ul">
 <li><code>bash</code> non-login shell</li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org744da4c" class="outline-4">
-<h4 id="org744da4c"><span class="section-number-4">3.0.5</span> <code>/usr/share/defaults/etc/zshenv</code></h4>
+<div id="outline-container-org72052b6" class="outline-4">
+<h4 id="org72052b6"><span class="section-number-4">3.0.5</span> <code>/usr/share/defaults/etc/zshenv</code></h4>
 <div class="outline-text-4" id="text-3-0-5">
 <p>
 It sets environment variables whose majority is identical to those set by <code>/usr/share/defaults/etc/profile</code>. It also allows admin overrides by sourcing <code>/etc/zshenv</code>
@@ -626,7 +617,6 @@ But notice that, various GCC flags and the <code>PATH</code> are not exactly the
 <p>
 It's sourced by
 </p>
-
 <ul class="org-ul">
 <li><code>zsh</code> login shell</li>
 <li><code>zsh</code> non-login shell</li>
@@ -634,8 +624,8 @@ It's sourced by
 </div>
 </div>
 
-<div id="outline-container-org12bdcb3" class="outline-4">
-<h4 id="org12bdcb3"><span class="section-number-4">3.0.6</span> <code>/usr/share/defaults/etc/zshrc</code></h4>
+<div id="outline-container-orga99ef89" class="outline-4">
+<h4 id="orga99ef89"><span class="section-number-4">3.0.6</span> <code>/usr/share/defaults/etc/zshrc</code></h4>
 <div class="outline-text-4" id="text-3-0-6">
 <p>
 It sets aliases, keybindings, and the prompt for <code>zsh</code> shell.
@@ -644,7 +634,6 @@ It sets aliases, keybindings, and the prompt for <code>zsh</code> shell.
 <p>
 It's sourced by
 </p>
-
 <ul class="org-ul">
 <li><code>zsh</code> login shell</li>
 <li><code>zsh</code> non-login shell</li>
@@ -652,8 +641,8 @@ It's sourced by
 </div>
 </div>
 
-<div id="outline-container-org64a2402" class="outline-4">
-<h4 id="org64a2402"><span class="section-number-4">3.0.7</span> <code>/usr/share/defaults/etc/zlogin</code></h4>
+<div id="outline-container-org3f41dd9" class="outline-4">
+<h4 id="org3f41dd9"><span class="section-number-4">3.0.7</span> <code>/usr/share/defaults/etc/zlogin</code></h4>
 <div class="outline-text-4" id="text-3-0-7">
 <p>
 It does not do anything except sourcing <code>/etc/zlogin</code> to allow admin overrides.
@@ -662,7 +651,6 @@ It does not do anything except sourcing <code>/etc/zlogin</code> to allow admin 
 <p>
 It's sourced by
 </p>
-
 <ul class="org-ul">
 <li><code>zsh</code> login shell</li>
 <li><code>zsh</code> non-login shell</li>
@@ -671,8 +659,8 @@ It's sourced by
 </div>
 </div>
 
-<div id="outline-container-orga769950" class="outline-2">
-<h2 id="orga769950"><span class="section-number-2">4</span> Goal</h2>
+<div id="outline-container-org4cff0b7" class="outline-2">
+<h2 id="org4cff0b7"><span class="section-number-2">4</span> Goal</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 In summary, this project aims to achieve the following:
@@ -680,7 +668,6 @@ In summary, this project aims to achieve the following:
 
 <ol class="org-ol">
 <li>System-wide defaults shall be defined in <code>/usr/share/defaults/etc/profile</code> only.
-
 <ul class="org-ul">
 <li>First, it's responsible for setting up environment variables for login shell and <code>xsession</code>, and therefore all of their sub-processes will inherit those environment variables.
 <ul class="org-ul">
@@ -694,9 +681,7 @@ In summary, this project aims to achieve the following:
 <li>To sum up, we only needs to source <code>/usr/share/defaults/etc/profile</code> in <code>/usr/share/defaults/etc/zprofile</code></li>
 </ul></li>
 </ul></li>
-
 <li>Second, it provides additional features to interactive shells:
-
 <ul class="org-ul">
 <li><p>
 Depending on the shell, the implementation of various functionalities would be slightly different. To determine the type of shell, we can use the following code block.
@@ -741,11 +726,9 @@ non-interactive
 </pre></li>
 
 <li>This is more reliable than checking the existence of environment variables such as <code>$BASH_VERSION</code> and <code>$ZSH_VERSION</code>. Consider the case where the parent process is a <code>zsh</code> shell, and the user launched a <code>bash</code> shell in <code>zsh</code>, then both <code>$BASH_VERSION</code> and <code>$ZSH_VERSION</code> are available. Nevertheless, these version variables are helpful as some features maybe version-specific.</li>
-
 <li><p>
 In particular, it's very easy to use the existing <code>bash</code> completions in <code>zsh</code> by executing the following first
 </p>
-
 <div class="org-src-container">
 <pre class="src src-shell"><span style="color: #2aa1ae; background-color: #292e34;">#</span><span style="color: #2aa1ae; background-color: #292e34;">!/usr/bin/</span><span style="color: #4f97d7; font-weight: bold;">zsh</span>
 <span style="color: #4f97d7;">autoload</span> -U +X compinit &amp;&amp; compinit
@@ -754,27 +737,39 @@ In particular, it's very easy to use the existing <code>bash</code> completions 
 </div></li>
 </ul></li>
 </ul></li>
-
 <li>Per-user defaults shall be left empty, but with information regarding the location of system-wide defaults in <code>/usr/share/defaults/etc/</code>, and the <code>/etc/</code> directory where system admins could override the system-wide defaults.</li>
 </ol>
 </div>
 </div>
 
-<div id="outline-container-org85b9736" class="outline-2">
-<h2 id="org85b9736"><span class="section-number-2">5</span> Limitations</h2>
+<div id="outline-container-org6049b51" class="outline-2">
+<h2 id="org6049b51"><span class="section-number-2">5</span> Limitations</h2>
 <div class="outline-text-2" id="text-5">
 <ul class="org-ul">
-<li>Only <code>bash/sh</code> and <code>zsh</code> are taken into account, while <code>fish</code> is not,
-which is also defined in <code>/usr/share/defauls/etc/shells</code></li>
-
+<li>Only <code>bash/sh</code> and <code>zsh</code> are taken into account, while <code>fish</code> is not, which is also defined in <code>/usr/share/defauls/etc/shells</code>.</li>
 <li>Only one graphical display manager, <code>gdm</code>, has been tested.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgf9b7ef0" class="outline-2">
+<h2 id="orgf9b7ef0"><span class="section-number-2">6</span> References</h2>
+<div class="outline-text-2" id="text-6">
+<ul class="org-ul">
+<li><a href="https://wiki.archlinux.org/index.php/Bash#Invocation">ArchWiki - Bash</a></li>
+<li><a href="https://wiki.archlinux.org/index.php/Zsh#Startup/Shutdown_files">ArchWiki - Zsh</a></li>
+<li><a href="http://zsh.sourceforge.net/Guide/zshguide02.html">A User's Guide to the Z-Shell - Ch. 2 What to put in your startup files</a></li>
+<li><a href="https://www.gnu.org/software/bash/manual/bash.html#Bash-Startup-Files">Bash Reference Manual - 6.2 Bash Startup Files</a></li>
+<li><a href="https://mywiki.wooledge.org/DotFiles">Configuring your login sessions with dot files</a></li>
+<li><a href="https://unix.stackexchange.com/a/110744/117088">How would I detect a non-login shell? (In Zsh)</a></li>
+<li><a href="https://mywiki.wooledge.org/ProcessManagement#theory">Process Management: On processes, environments and inheritance</a></li>
 </ul>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Lucius Hu</p>
-<p class="date">Created: 2019-05-26 Sun 02:00</p>
+<p class="date">Created: 2019-05-26 Sun 02:45</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 <script>window.klipse_settings = {selector_eval_html: '.src-html',
