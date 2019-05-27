@@ -35,17 +35,23 @@
 **** Graphical Mode
      If the user has a graphical display manager, such as =gdm=, installed and enabled, the user would be presented with a graphical user interface where he can choose an desktop environment for the session, and finish the authentication process to log in to a user account. This is called =Graphical Mode=.
 
-     Unlike the text mode, neither ~bash~ nor ~zsh~ is the actual login shell. So the loading sequence of startup files described above might not be valid. Take =gdm= as an example, it is ~/usr/libexec/gdm-x-session~ that acts as a login shell, in the sense that every process started after login is a sub-process of it.
+     Unlike the text mode, neither ~bash~ nor ~zsh~ is the actual login shell. So the loading sequence of startup files described above might not be valid. Take =gdm= as an example, it is ~/usr/libexec/gdm-x-session~ that acts as a login shell, in the sense that every process started after login is a sub-process of it. What startup files the graphical session will source is complicated, and it varies by both the choice of display manager, and the distribution.
 
-     What startup files the graphical session will source is complicated, and it varies by both the choice of display manager, and the distribution. In the case of =gdm=, =/usr/share/gdm/Xsession= defines that ~gdm-x-session~ should source the followings files:
-
+***** =gdm=
+      In the case of =gdm=, =/usr/share/gdm/Xsession= defines that ~gdm-x-session~ should source the followings files:
 - =/etc/profile=, which is system-wide profile in many /other distribution/, but a /admin override profile/ in Clear Linux.
 - =/usr/share/defaults/etc/profile=, the default system-wide profile in Clear Linux
 - =~/.profile=, the per-user profile
 - =/etc/xprofile=, system-wide X specific setups
 - =~/.xprofile=, per-user X specific setups
 
-By default, only =/usr/share/defaults/etc/profile= and =~/.profile= exits, therefore the the startup process is the same as the default bahaviour of a ~bash~ login shell.
+      By default, only =/usr/share/defaults/etc/profile= and =~/.profile= exits, therefore the the startup process is the same as the default bahaviour of a ~bash~ login shell.
+
+***** =lightdm=
+      =/usr/share/lightdm/lightdm-session= (?) defines the same sequence of startup files, except that it doesn't include =/usr/share/defaults/etc/profile=.
+
+
+***** =sddm=
 
 *** Interactive Shell
     When a user starts a terminal emulator, the shell launched in the terminal is a interactive shell. Also, the login shell in the text mode is interactive as well.
@@ -166,7 +172,7 @@ By default, only =/usr/share/defaults/etc/profile= and =~/.profile= exits, there
      - Depending on the shell, the implementation of various functionalities would be slightly different. To determine the type of shell, we can use the following code block.
        #+BEGIN_SRC shell :exports both
          #!/usr/bin/sh
-         case "$(ps -o comm= $$)" in
+         case "$(ps -o args= $$ | sed -e 's# .*##' -e 's#.*/##')" in
            sh) echo 'sh';;
            bash) echo 'bash';;
            zsh) echo 'zsh';;
@@ -184,22 +190,28 @@ By default, only =/usr/share/defaults/etc/profile= and =~/.profile= exits, there
        #+END_SRC
      - This is more reliable than checking the existence of environment variables such as =$BASH_VERSION= and =$ZSH_VERSION=. Consider the case where the parent process is a ~zsh~ shell, and the user launched a ~bash~ shell in ~zsh~, then both =$BASH_VERSION= and =$ZSH_VERSION= are available. Nevertheless, these version variables are helpful as some features maybe version-specific.
      - In particular, it's very easy to use the existing ~bash~ completions in ~zsh~ by executing the following first
-       #+BEGIN_SRC shell :exports code
+       #+BEGIN_SRC shell
          #!/usr/bin/zsh
          autoload -U +X compinit && compinit
          autoload -U +X bashcompinit && bashcompinit
        #+END_SRC
 2. Per-user defaults shall be left empty, but with information regarding the location of system-wide defaults in =/usr/share/defaults/etc/=, and the =/etc/= directory where system admins could override the system-wide defaults.
 
+** List of =clearlinux-pkgs= Involved
+*** [[https://github.com/clearlinux-pkgs/lightdm][lightdm]]
+**** [[https://github.com/clearlinux-pkgs/lightdm/blob/master/0004-Add-lightdm-session.patch][0004-Add-lightdm-session.patch]]
+     1. The sequence of profiles to be sourced shall be the consistent as =gdm=, which is =/etc/profile=, =/usr/share/defaults/etc/profile=, =$HOME/.profile=, =/etc/xprofile=, =$HOME/.xprofile=. Currently, the second one is missing.
+
 ** Limitations
 - Only =bash/sh= and ~zsh~ are taken into account, while =fish= is not, which is also defined in =/usr/share/defauls/etc/shells=.
-- Only one graphical display manager, =gdm=, has been tested.
-
+- As for (graphical) display manager, currently =gdm=, =lightdm=, and =sddm= are available on Clear Linux. But only =gdm= has been tested.
 ** References
 - [[https://wiki.archlinux.org/index.php/Bash#Invocation][ArchWiki - Bash]]
 - [[https://wiki.archlinux.org/index.php/Zsh#Startup/Shutdown_files][ArchWiki - Zsh]]
 - [[http://zsh.sourceforge.net/Guide/zshguide02.html][A User's Guide to the Z-Shell - Ch. 2 What to put in your startup files]]
 - [[https://www.gnu.org/software/bash/manual/bash.html#Bash-Startup-Files][Bash Reference Manual - 6.2 Bash Startup Files]]
-- [[https://mywiki.wooledge.org/DotFiles][Configuring your login sessions with dot files]]
-- [[https://unix.stackexchange.com/a/110744/117088][How would I detect a non-login shell? (In Zsh)]]
-- [[https://mywiki.wooledge.org/ProcessManagement#theory][Process Management: On processes, environments and inheritance]]
+- [[https://help.gnome.org/admin/gdm/stable/configuration.html.en][GNOME Display Manager Reference Manual - Ch.5 Configuration]]
+- [[https://mywiki.wooledge.org/DotFiles][Greg's Wiki - Configuring your login sessions with dot files]]
+- [[https://mywiki.wooledge.org/ProcessManagement#theory][Greg's Wiki - Process Management: On processes, environments and inheritance]]
+- [[https://unix.stackexchange.com/a/4628/117088][Unix & Linux StackExchange - Correctly setting environment]]
+- [[https://unix.stackexchange.com/a/110744/117088][Unix & Linux StackExchange - How would I detect a non-login shell? (In Zsh)]]

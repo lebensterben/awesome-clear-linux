@@ -4,3 +4,6 @@
 [submodule "TidyShell/zsh"]
 	path = TidyShell/zsh
 	url = git@github.com:clearlinux-pkgs/zsh.git
+[submodule "TidyShell/lightdm"]
+	path = TidyShell/lightdm
+	url = git@github.com:clearlinux-pkgs/lightdm.git
