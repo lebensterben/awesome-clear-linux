@@ -40,7 +40,7 @@
 ***** =gdm=
       In the case of =gdm=, =/usr/share/gdm/Xsession= defines that ~gdm-x-session~ should source the followings files:
 - =/etc/profile=, which is system-wide profile in many /other distribution/, but a /admin override profile/ in Clear Linux.
-- =/usr/share/defaults/etc/profile=, the default system-wide profile in Clear Linux
+- =/usr/share/defaults/etc/profile=, the default system-wide profile in Clear Linux (A patch has been submitted which suggest to source this file first)
 - =~/.profile=, the per-user profile
 - =/etc/xprofile=, system-wide X specific setups
 - =~/.xprofile=, per-user X specific setups
@@ -48,10 +48,10 @@
       By default, only =/usr/share/defaults/etc/profile= and =~/.profile= exits, therefore the the startup process is the same as the default bahaviour of a ~bash~ login shell.
 
 ***** =lightdm=
-      =/usr/share/lightdm/lightdm-session= (?) defines the same sequence of startup files, except that it doesn't include =/usr/share/defaults/etc/profile=.
-
+      =/usr/share/lightdm/lightdm-session= (?) defines the same sequence of startup files, except that it doesn't include =/usr/share/defaults/etc/profile=. (I've sent a patch to the dev team already.)
 
 ***** =sddm=
+      =/usr/share/sddm/Xsession= (?) and =/usr/share/sddm/wayland-session= (?) reads startup files according to the =$SHELL= environment variable. For ~bash~, ~fish~, and all other shell programs except ~zsh~, it reads the same sequence of files as =gdm=. For ~zsh~, it
 
 *** Interactive Shell
     When a user starts a terminal emulator, the shell launched in the terminal is a interactive shell. Also, the login shell in the text mode is interactive as well.
