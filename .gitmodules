@@ -10,3 +10,6 @@
 [submodule "TidyShell/gdm"]
 	path = TidyShell/gdm
 	url = git@github.com:clearlinux-pkgs/gdm.git
+[submodule "TidyShell/sddm"]
+	path = TidyShell/sddm
+	url = git@github.com:clearlinux-pkgs/sddm.git
