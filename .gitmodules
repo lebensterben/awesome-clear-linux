@@ -13,3 +13,6 @@
 [submodule "TidyShell/sddm"]
 	path = TidyShell/sddm
 	url = git@github.com:clearlinux-pkgs/sddm.git
+[submodule "TidyShell/cnf"]
+	path = TidyShell/cnf
+	url = git@github.com:clearlinux-pkgs/cnf.git
