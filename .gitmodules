@@ -16,3 +16,6 @@
 [submodule "TidyShell/cnf"]
 	path = TidyShell/cnf
 	url = git@github.com:clearlinux-pkgs/cnf.git
+[submodule "TidyShell/swupd-client"]
+	path = TidyShell/swupd-client
+	url = git@github.com:clearlinux/swupd-client.git
