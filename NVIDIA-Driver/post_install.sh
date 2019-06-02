@@ -3,7 +3,7 @@
 ## Make sure to have root privilege
 if [ "$(whoami)" != 'root' ]; then
   echo -e "\e[31m\xe2\x9d\x8c Please retry with root privilege.\e[m"
-  exit 0
+  exit 1
 fi
 
 ## Validate that nvidia kernel modules are loaded
