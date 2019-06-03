@@ -12,6 +12,6 @@ lsmod | grep ^nvidia
 
 ## Verify and fix OpenGL library files files that are likely modified by NVIDIA installer
 echo -e "\e[33m\xe2\x8f\xb3 Verifying the integrity of OpenGL library files...\e[m"
-swupd verify --quick --fix --bundles=lib-opengl
+swupd repair --quick --bundles=lib-opengl
 
 echo -e "\e[32m\xf0\x9f\x91\x8f Installation completed!\e[m"
