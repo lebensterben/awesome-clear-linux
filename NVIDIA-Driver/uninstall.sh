@@ -20,6 +20,12 @@ unset i
 echo -e "\e[33m\xe2\x8f\xb3 Running nvidia-uninstall ...\e[m"
 /opt/nvidia/bin/nvidia-uninstall
 
+## Removing /etc/ld.conf.d/nvidia.conf
+echo -e "\e[33m\xe2\x8f\xb3 Removing NVIDIA libraries ...\e[m"
+if [ -f "/etc/ld.conf.d/nvidia.conf" ]; then
+  rm "/etc/ld.conf.d/nvidia.conf"
+fi
+
 ## Ask the user whether he wants to reboot now
 echo -e "\e[32mPlease reboot your system ASAP.\e[m"
 exit 0
