@@ -3,12 +3,12 @@
 ## Make sure to have root privilege
 if [ "$(whoami)" != 'root' ]; then
   echo -e "\e[31m\xe2\x9d\x8c Please retry with root privilege.\e[m"
-  exit 0
+  exit 1
 fi
 
 ## Install Dynamic Kernel Module System (DKMS) according to kernel variant
 echo -e "\e[33m\xe2\x8f\xb3 Installing Dynamic Kernel Module System ...\e[m"
-VARIANT="$(uname -r | rev | sed 's/\..*//' | rev | sed -e 's/^/kernel-/' -e 's/$/-dkms/')"
+VARIANT="$(uname -r | sed 's/.*\.//' | sed -e 's/^/kernel-/' -e 's/$/-dkms/')"
 swupd bundle-add "$VARIANT"
 unset VARIANT
 

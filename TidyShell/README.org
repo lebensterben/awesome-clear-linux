@@ -1,0 +1,217 @@
+#+TITLE: TidyShell
+#+AUTHOR: Lucius Hu
+** Overview
+   Currently, the shell default shell startup files for ~sh~ (Bourne shell, aliased to ~bash~ and thus would be omitted in the following discussion), ~bash~ (Bash), and ~zsh~ (Z Shell) are rather messy in the sense that:
+
+- The environment variables are different for ~bash~ and ~zsh~.
+- Some functionalities are not available for ~zsh~ while it's feasible to achieve them in ~zsh~.
+- Startup files are sourcing each other, and in some cases the same startup files would be sourced for multiple times.
+- ~zsh~ has an entirely different set of startup files as oppose to ~sh~ and ~bash~, but actually most statement in the startup files are compatible to all of the three shells. This may result in inconsistency when future a future update changed startup files for one ~bash~, while such change is not incorporated into ~zsh~, or vice versa.
+- The default global startup files are stored in =/usr/share/defaults/etc/=, and an average user may not be aware of them, as many distributions have the system-wide default startup files stored in =/etc=.
+
+** Loading process of startup files
+   A summary of how the startup files are processed on Clear Linux (Version 29480) is given below:
+
+*** Login shell:
+    Depending on whether the Linux OS boots into text mode or graphical mode, the concept of login shell would be different.
+
+**** Text Mode
+     If the user is first presented with a login prompt, and after he successfully log in to a user account the shell prompt appears, then it's *text mode*.
+
+     The shell he is presented to is the *login shell*, which could be changed via ~chsh~ or ~lchsh~. And any sub-process of login shell would inherit the environment variables of the login shell. In particular, if the user invoked another shell either by directly executing a shell program, by using commands such as ~su~, ~sudo~, or by executing a shell script, the invoked shell would inherit the environment variables of the login shell. Thus correctly setting environment variables for the login shell would ensure that they would also be set for any shell invoked after login, while the user is still able to override those environment variables directly or startup files of (interactive) shells.
+
+***** ~bash~
+      The ~bash~ login shell first looks for the global profile at =/usr/share/defaults/etc/profile=. Next it tries to locate a per-user profile at =~/.bash_profile=, =~/.bash_login=, and =~/.profile=, where the first one found, in that order, is sourced. By default, only =~/.profile= exists.
+
+      In addition, when a ~bash~ login shell exits, it will source per-user logout script at =~/.bash_logout=, which is not created by default.
+
+***** ~zsh~
+      A ~zsh~ login shell will source three types of startup files, i.e. =zshenv=, =zprofile=, and =zlogin=, in that order. For each of the five types, ~zsh~ would look for a global configuration in =/usr/share/defaults/etc/<TYPE>=, and then the user's configuration in =~/.<TYPE>=.
+
+      Similar to ~bash~, when a ~zsh~ process exits, it will source a logout script, =~/.zlogout=.
+
+      Currently, the default global =env=, =zshrc=, and =zlogin= are created, but no local startup file is created.
+
+**** Graphical Mode
+     If the user has a graphical display manager, such as =gdm=, installed and enabled, the user would be presented with a graphical user interface where he can choose an desktop environment for the session, and finish the authentication process to log in to a user account. This is called =Graphical Mode=.
+
+     Unlike the text mode, neither ~bash~ nor ~zsh~ is the actual login shell. So the loading sequence of startup files described above might not be valid. Take =gdm= as an example, it is ~/usr/libexec/gdm-x-session~ that acts as a login shell, in the sense that every process started after login is a sub-process of it. What startup files the graphical session will source is complicated, and it varies by both the choice of display manager, and the distribution.
+
+***** =gdm=
+      In the case of =gdm=, =/usr/share/gdm/Xsession= defines that ~gdm-x-session~ should source the followings files:
+- =/etc/profile=, which is system-wide profile in many /other distribution/, but a /admin override profile/ in Clear Linux.
+- =/usr/share/defaults/etc/profile=, the default system-wide profile in Clear Linux (A patch has been submitted which suggest to source this file first)
+- =~/.profile=, the per-user profile
+- =/etc/xprofile=, system-wide X specific setups
+- =~/.xprofile=, per-user X specific setups
+
+      By default, only =/usr/share/defaults/etc/profile= and =~/.profile= exits, therefore the the startup process is the same as the default bahaviour of a ~bash~ login shell.
+
+***** =lightdm=
+      =/usr/share/lightdm/lightdm-session= (?) defines the same sequence of startup files, except that it doesn't include =/usr/share/defaults/etc/profile=. (I've sent a patch to the dev team already.)
+
+***** =sddm=
+      =/usr/share/sddm/Xsession= (?) and =/usr/share/sddm/wayland-session= (?) reads startup files according to the =$SHELL= environment variable. For ~bash~, ~fish~, and all other shell programs except ~zsh~, it reads the same sequence of files as =gdm=. For ~zsh~, it
+
+*** Interactive Shell
+    When a user starts a terminal emulator, the shell launched in the terminal is a interactive shell. Also, the login shell in the text mode is interactive as well.
+
+**** ~bash~
+     ~bash~ interactive shell first source the global ~bash~ configuration at =/usr/share/defaults/etc/bash.bashrc= and then the user configuration at =~/.bashrc=. Both files exits after installation of ~bash~.
+
+     If it's also a login shell, then these two configurations would be sourced at last.
+
+**** ~zsh~
+     ~zsh~ interactive shell will source =zshenv= and =zshrc= files at =/usr/share/defaults/etc/<TYPE>= and =~/.<TYPE>= respectively. Only the system-wide =env= and =zshrc= exists after installing of ~zsh~.
+
+     If it's also a login shell, then =zshrc= files are sourced after =zprofile=, and before =zlogin=, if any of them exists.
+
+*** Non-interactive Shell
+    When a shell program is called upon by another process to read and execute a shell script, then the shell program is in non-interactive mode.
+
+**** ~bash~
+     A non-interactive ~bash~ shell won't source =bashrc= files, and in fact unless it is invoked by ~bash --login~, it won't source any startup files.
+
+     If =--login= option is specified, then =bashrc= files won't be sourced, but all other ~bash~ startup files mentioned above will be sourced.
+
+**** ~zsh~
+     Similar to ~bash~, a non-interactive ~zsh~ shell won't source =zshrc= regardless of whether it's login shell or not.
+
+     If it's login shell, i.e if it's invoked with =--login= option, then it also sources =zprofile= and =zlogin= during startup.
+
+     But there's one thing worth to mention, any ~zsh~ instance sources =zshenv= files. Thus even for a non-login, non-interactive ~zsh~ shell, =zshenv= files are still sourced.
+
+** Current default startup files
+
+**** =/usr/share/defaults/etc/profile=
+     This file sets various environment variables, determines the appearance of the prompt, and sources the shell scripts under =/usr/share/defaults/etc/profile.d/=, which are created by default. And the system admin could make overrides by creating =/etc/profile=, and putting scripts under =/etc/profile.d/=, which would be sourced by =/usr/share/defaults/etc/profile=.
+
+     This file is sourced by
+- ~bash~ login shell for twice, where the second time is via =~/.profile=
+- ~bash~ non-login shell for twice, via =/usr/share/defaults/etc/bash.bashrc= and =~/.bashrc= respectively.
+- =/usr/share/gdm/Xsession= for twice if a graphical display manager is launched, where the second time is via =~/.profile=
+
+***** =/usr/share/defaults/etc/profile.d/*=
+      There are 7 files in this directory and they're sourced by =/usr/share/defaults/etc/profile=.
+- =10-command-not-found.sh=, provides similar functionality as =command-not-found= in =Ubuntu=.
+- =50-swupd.bash=, provides auto-completion of =swupd= for ~bash~.
+- =bash_completion.sh= provides auto-completion for ~bash~.
+  - The simple script below shows the number of command completion that is unique for ~zsh~, unique for ~bash~, and common for both shells, respectively. Currently, there numbers are 764, 455, and 149. Though ~zsh~ ships with more auto-completions than ~bash~ has, but sourcing the ~bash~ completions does extend ~zsh~‘s functionality.
+    #+BEGIN_SRC shell :exports both
+      #!/usr/bin/zsh
+      zsh="$(find /usr/share/zsh -path '*/functions/_*' |
+           sort |
+           sed -e 's/.*functions\/_//')"
+      bash="$(find /usr/share/bash-completion/completions/ -not -type l -not -name '_*' |
+            sed -e 's/.*completions\///g' |
+            sort)"
+      comm -23 <(echo $zsh) <(echo $bash) | wc -l
+      comm -13 <(echo $zsh) <(echo $bash) | wc -l
+      comm -12 <(echo $zsh) <(echo $bash) | wc -l
+    #+END_SRC
+- =50-colors.sh= colourise the output of =ls= command, and also set the colours for GCC compilation flags.
+- =50-prompt= colourise the prompt defined in  =/usr/share/defaults/etc/profile=.
+- =ccache.sh= add =/usr/lib64/ccache/bin= to accelerate GCC compilation.
+- =flatpak.sh= sets up directories so that apps installed via =flatpak= would correctly show up in =gnome=.
+
+**** =~/.profile=
+     It sources =~/.bashrc=, which sources =/usr/share/defaults/etc/profile=. Thus its redundant.
+
+     This file is sourced by
+- ~bash~ login shell (when neither =~/.bash_profile= nor =~/.bash_login= is available, which is the default)
+- =/usr/share/gdm/Xsession= in graphical mode
+
+**** =/usr/share/defaults/etc/bash.bashrc=
+     It sources the global profile =/usr/share/defaults/etc/profile=. It also allow admin overrides by sourcing =/etc/profile=, which is redundant since =/usr/share/defaults/etc/profile= already did that.
+
+     It's sourced by
+- ~bash~ non-login shell for twice, where the second time is via =~/.bashrc=
+
+**** =~/.bashrc=
+     Has identical contents as =/usr/share/defaults/etc/bash.bashrc= has, which makes it redundant.
+
+     It's sourced by
+- ~bash~ non-login shell
+
+**** =/usr/share/defaults/etc/zshenv=
+     It sets environment variables whose majority is identical to those set by =/usr/share/defaults/etc/profile=. It also allows admin overrides by sourcing =/etc/zshenv=
+
+     But notice that, various GCC flags and the =PATH= are not exactly the same, in =Version 29480=.
+
+     It's sourced by
+- ~zsh~ login shell
+- ~zsh~ non-login shell
+
+**** =/usr/share/defaults/etc/zshrc=
+     It sets aliases, keybindings, and the prompt for ~zsh~ shell.
+
+     It's sourced by
+- ~zsh~ login shell
+- ~zsh~ non-login shell
+
+**** =/usr/share/defaults/etc/zlogin=
+     It does not do anything except sourcing =/etc/zlogin= to allow admin overrides.
+
+     It's sourced by
+- ~zsh~ login shell
+- ~zsh~ non-login shell
+
+** Goal
+   In summary, this project aims to achieve the following:
+
+1. System-wide defaults shall be defined in =/usr/share/defaults/etc/profile= only.
+   - First, it's responsible for setting up environment variables for login shell and =xsession=, and therefore all of their sub-processes will inherit those environment variables.
+     - By default, this file is sourced by ~bash~ login shell, and =gdm='s =xsession=.
+     - ~bash~ and =gdm= would also source =~/.profile=, but we shall not source =/usr/share/defaults/etc/profile= in it.
+     - ~zsh~'s login shell would source =zshenv=, =zprofile=, =zshrc=, =zlogin=.
+       - =zshenv= shall be avoided because it's sourced for all ~zsh~ instances.
+       - =zlogin= is sourced after =zshrc=, where people tends to make customization. To ensure compatibility, we'd not use =zlogin=, but =zprofile= instead, which is sourced before =zshrc=
+       - =zprofile= shall source =/usr/share/defaults/etc/profile=, and  this is how we ensure the consistency.
+       - To sum up, we only needs to source =/usr/share/defaults/etc/profile= in =/usr/share/defaults/etc/zprofile=
+   - Second, it provides additional features to interactive shells:
+     - Depending on the shell, the implementation of various functionalities would be slightly different. To determine the type of shell, we can use the following code block.
+       #+BEGIN_SRC shell :exports both
+         #!/usr/bin/sh
+         case "$(ps -o args= $$ | sed -e 's# .*##' -e 's#.*/##')" in
+           sh) echo 'sh';;
+           bash) echo 'bash';;
+           zsh) echo 'zsh';;
+           *) echo 'UNKNOWN';;
+         esac
+       #+END_SRC
+     - The following test could determine whether a shell is interactive, which works for ~sh~, ~bash~, and ~zsh~. For example, when running the following code block as an shell script, it must be non-interactive. But if the /shebang/ specified the =-i= option to ~bash~, it forces the shell script to be executed by a interactive shell.
+       #+BEGIN_SRC shell :exports both
+         #!/usr/bin/bash
+         [ -n "$(echo $- | grep i)" ] && echo 'interactive' || echo 'non-interactive'
+       #+END_SRC
+       #+BEGIN_SRC shell :exports both
+         #!/usr/bin/bash -i
+         [ -n "$(echo $- | grep i)" ] && echo 'interactive' || echo 'non-interactive'
+       #+END_SRC
+     - This is more reliable than checking the existence of environment variables such as =$BASH_VERSION= and =$ZSH_VERSION=. Consider the case where the parent process is a ~zsh~ shell, and the user launched a ~bash~ shell in ~zsh~, then both =$BASH_VERSION= and =$ZSH_VERSION= are available. Nevertheless, these version variables are helpful as some features maybe version-specific.
+     - In particular, it's very easy to use the existing ~bash~ completions in ~zsh~ by executing the following first
+       #+BEGIN_SRC shell
+         #!/usr/bin/zsh
+         autoload -U +X compinit && compinit
+         autoload -U +X bashcompinit && bashcompinit
+       #+END_SRC
+2. Per-user defaults shall be left empty, but with information regarding the location of system-wide defaults in =/usr/share/defaults/etc/=, and the =/etc/= directory where system admins could override the system-wide defaults.
+
+** List of =clearlinux-pkgs= Involved
+*** [[https://github.com/clearlinux-pkgs/lightdm][lightdm]]
+**** [[https://github.com/clearlinux-pkgs/lightdm/blob/master/0004-Add-lightdm-session.patch][0004-Add-lightdm-session.patch]]
+     1. The sequence of profiles to be sourced shall be the consistent as =gdm=, which is =/etc/profile=, =/usr/share/defaults/etc/profile=, =$HOME/.profile=, =/etc/xprofile=, =$HOME/.xprofile=. Currently, the second one is missing.
+
+** Limitations
+- Only =bash/sh= and ~zsh~ are taken into account, while =fish= is not, which is also defined in =/usr/share/defauls/etc/shells=.
+- As for (graphical) display manager, currently =gdm=, =lightdm=, and =sddm= are available on Clear Linux. But only =gdm= has been tested.
+** References
+- [[https://wiki.archlinux.org/index.php/Bash#Invocation][ArchWiki - Bash]]
+- [[https://wiki.archlinux.org/index.php/Zsh#Startup/Shutdown_files][ArchWiki - Zsh]]
+- [[http://zsh.sourceforge.net/Guide/zshguide02.html][A User's Guide to the Z-Shell - Ch. 2 What to put in your startup files]]
+- [[https://www.gnu.org/software/bash/manual/bash.html#Bash-Startup-Files][Bash Reference Manual - 6.2 Bash Startup Files]]
+- [[https://help.gnome.org/admin/gdm/stable/configuration.html.en][GNOME Display Manager Reference Manual - Ch.5 Configuration]]
+- [[https://mywiki.wooledge.org/DotFiles][Greg's Wiki - Configuring your login sessions with dot files]]
+- [[https://mywiki.wooledge.org/ProcessManagement#theory][Greg's Wiki - Process Management: On processes, environments and inheritance]]
+- [[https://unix.stackexchange.com/a/4628/117088][Unix & Linux StackExchange - Correctly setting environment]]
+- [[https://unix.stackexchange.com/a/110744/117088][Unix & Linux StackExchange - How would I detect a non-login shell? (In Zsh)]]

@@ -1,0 +1,14 @@
+#+TITLE: README
+#+AUTHOR: Lucius Hu
+** Introduction
+   This is a repository where I store various scripts and documentation, either written by me or I came across online.
+
+   Specifically, these scripts shall work on my Clear Linux workstation, while the documentation is also written for Clear Linux. Though they may be applied to other Linux distributions, it is not guaranteed.
+** Resources [1/3]
+   Currently I'm working on the following
+- [X] Scripts to automate installation and uninstallation of NVIDIA Proprietary Driver for Linux.
+- [-] Guides to install CUDA Toolkits on Clear Linux.
+- [-] An attempt to unify default system-wide startup files for both ~zsh~ and ~bash~.
+- [ ] Scripts to provide h264 support for firefox, based on [[https://community.clearlinux.org/t/how-to-h264-etc-support-for-firefox-including-ffmpeg-install/195][How-to: h264 etc. Support for Firefox (including ffmpeg install)]]
+** License
+   All resources are licensed under GPL v3, unless otherwise noticed.
