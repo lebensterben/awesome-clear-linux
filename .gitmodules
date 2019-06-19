@@ -4,3 +4,18 @@
 [submodule "TidyShell/zsh"]
 	path = TidyShell/zsh
 	url = git@github.com:clearlinux-pkgs/zsh.git
+[submodule "TidyShell/lightdm"]
+	path = TidyShell/lightdm
+	url = git@github.com:clearlinux-pkgs/lightdm.git
+[submodule "TidyShell/gdm"]
+	path = TidyShell/gdm
+	url = git@github.com:clearlinux-pkgs/gdm.git
+[submodule "TidyShell/sddm"]
+	path = TidyShell/sddm
+	url = git@github.com:clearlinux-pkgs/sddm.git
+[submodule "TidyShell/cnf"]
+	path = TidyShell/cnf
+	url = git@github.com:clearlinux-pkgs/cnf.git
+[submodule "TidyShell/swupd-client"]
+	path = TidyShell/swupd-client
+	url = git@github.com:clearlinux/swupd-client.git
