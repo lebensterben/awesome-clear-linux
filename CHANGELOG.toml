@@ -1,0 +1,34 @@
+[header]
+text = "Changelog\n========="
+once = true
+
+[footer]
+text = "===============================\nLicensed under GPL-3.0-or-later"
+once = true
+
+[[tags]]
+tag = "default"
+name = "Default"
+
+[[tags]]
+tag = "feature"
+name = "Feature"
+
+[[tags]]
+tag = "doc"
+name = "Documentation"
+
+[[tags]]
+[[tags.subtags]]
+tag = "doc_internal"
+name = "Internal documentation"
+
+[[tags]]
+[[tags.subtags]]
+tag = "doc_cust"
+name = "Customer documentation"
+
+[[tags]]
+tag = "internal"
+name = "Internal"
+footers = ["Fixes"]
