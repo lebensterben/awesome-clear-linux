@@ -1,4 +1,4 @@
-NVIDIA-Linux-x86_64-430.14.run
+NVIDIA-Linux-x86_64-*.run
 TensorRT-5.1.2.2/
 cuDNN/
 cuda_10.0.130_410.48_linux.run
