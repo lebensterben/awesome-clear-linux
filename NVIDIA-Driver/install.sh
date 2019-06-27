@@ -31,11 +31,18 @@ if [ "$INSTALLER" = '' ]; then
   INSTALLER="$(find $HOME/Downloads -maxdepth 1 -name 'NVIDIA-Linux-x86_64*\.run' | sort -r | head -1 )"
   if [ "$INSTALLER" = '' ]; then
     echo -e "\e[31m\xe2\x9d\x8c Cannot find NVIDIA-Linux-x86_64-<VERSION>.run under current directory or ~/Downloads\e[m"
-    echo -e "\e[32mBelow are all display adapters currently identified on your current system:\e[m"
-    echo -e "\e[32m$(sudo lshw -C display | grep product | sed -r 's/.*product: /\t/g' | uniq)\e[m"
-    echo -e "\e[32mPlease download the appropriate driver and re-run this install.sh script.\e[m"
-    xdg-open https://www.nvidia.com/download/index.aspx
-    exit 0
+    LATEST="$(curl https://download.nvidia.com/XFree86/Linux-x86_64/latest.txt | cut -d' ' -f2)"
+    if [ -z "$LATEST" ]; then
+      echo -e "\e[32mObtaining latest NVIDIA driver version number...\e[m"
+      exit 1
+    else
+      echo -e "\e[32mThe latest version of NVIDIA driver is \e[33m${LATEST%/*}\e[m"
+      echo -e "\e[32mDowloading \e[33m${LATEST#*/}...\e[m"
+      curl -O "https://download.nvidia.com/XFree86/Linux-x86_64/$LATEST"
+      if [ -f "${LATEST#*/}" ]; then
+        INSTALLER="${LATEST#*/}"
+      fi
+    fi
   fi
 fi
 
@@ -59,4 +66,3 @@ sh "$INSTALLER" \
    --force-libglx-indirect \
    --dkms \
    --silent
-unset INSTALLER
