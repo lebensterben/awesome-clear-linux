@@ -1,5 +1,6 @@
 #+TITLE: Scripts for installing NVIDIA Proprietary Driver on Clear Linux
 #+AUTHOR: Lucius Hu
+
 ** Introduction
    Based on the [[https://clearlinux.org/documentation/clear-linux/tutorials/nvidia][tutorial by Clear Linux]], I wrote four bash scripts that automate the installation, and uninstallation, of NVIDIA proprietary driver.
 
@@ -7,9 +8,9 @@
 
 *** 1. =pre_install.sh=
 - Installs =kernel-native-dkms= or =kernel-lts-dkms= bundle based on your kernel type
-- Updates Clear Linux OS boot-loader
+- Updates Clear Linux OS bootloader
 - Disables nouveau driver by blacklisting it in =/etc/modprobe.d/disable-nouveau.conf=
-- Reminds the user to reboot, and use `install.sh** script to proceed to installation.
+- Reminds the user to reboot, and to run =install.sh= script to proceed to installation.
 
 *Note*: After the reboot the GUI desktop environment may not work, then you need press =Ctrl+Alt+F2= to enter =tty2=, from which you can log-in and proceed to the next step.
 
@@ -48,13 +49,19 @@
 - Remind the user to reboot after uninstallation.
 
 ** Known Issues
-- It's been reported that ~gnome-control-center~ will not work due to incorrect =libGL=[fn:1].
+- It's been reported that ~gnome-control-center~ will not work due to incorrect =libGL=[fn:1], but this could be fixed after running =swupd repair --quick --bundles==lib-opengl=, which is included in =post_install.sh=.
 - If there is a integrated GPU on Intel Chip-set, the user has to disable the Intel VGA driver, or otherwise he will see the following error message[fn:2].
 #+DOWNLOADED: https://sjc1.discourse-cdn.com/business4/uploads/clearlinux/original/1X/e413fa015036c601ed4f717a4deed01a0c2ebf66.png @ 2019-05-26 04:06:21
 [[file:img/e413fa015036c601ed4f717a4deed01a0c2ebf66_2019-05-26_04-06-21.png]]
 
 ** Footnotes
 
+[fn:1] [[https://github.com/clearlinux/distribution/issues/791#issuecomment-495889570][GitHub Issue #791 - 2060 rtx: Black screen after login live usb]]
+
 [fn:2] [[https://community.clearlinux.org/t/bash-scripts-to-automate-installation-of-nvidia-proprietary-driver/368/10?u=doct0rhu][Clear Linux Forums - Bash scripts to automate installation of NVIDIA proprietary driver]]
 
-[fn:1] [[https://github.com/clearlinux/distribution/issues/791#issuecomment-495889570][GitHub Issue #791 - 2060 rtx: Black screen after login live usb]]
+-----
+
+#+BEGIN_SRC shell :exports results
+  echo "This file was last updated on" "$(date +"%Y/%M/%d")"
+#+END_SRC

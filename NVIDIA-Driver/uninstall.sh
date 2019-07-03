@@ -28,6 +28,8 @@ fi
 if [ -e /usr/share/X11/xorg.conf.d/nvidia-drm-outputclass.conf ]; then
   rm /usr/share/X11/xorg.conf.d/nvidia-drm-outputclass.conf
 fi
+echo -e "\e[32m Updating dynamic linker run-time bindings and library cache...\e[m"
+ldconfig
 
 ## Removing Xorg configuration file for NVIDIA driver
 echo -e "\e[33m\xe2\x8f\xb3 Restoring Xorg configuration ...\e[m"
@@ -36,6 +38,5 @@ if [ -e /etc/X11/xorg.conf.d/nvidia-files-opt.conf ]; then
 fi
 
 ## Ask the user whether he wants to reboot now
-clr-boot-manager update
 echo -e "\e[32mPlease reboot your system ASAP.\e[m"
 exit 0
