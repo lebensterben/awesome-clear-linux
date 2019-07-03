@@ -30,9 +30,13 @@ if [ "$INSTALLER" = '' ]; then
   fi
 fi
 
-
 ## Configure the dynamic linker configuration to include /opt/nvidia/lib and /opt/nvidia/lib32
 echo -e "\e[33m\xe2\x8f\xb3 Configuring dynamic linker configuration ...\e[m"
+if [ ! -f /etc/ld.so.conf ] || [ "$(grep 'include /etc/ld\.so\.conf\.d/\*\.conf' /etc/ld.so.conf )" = '' ]; then
+  cat <<EOF >> /etc/ld.so.conf
+include /etc/ld.so.conf.d/*.conf
+EOF
+fi
 if [ ! -d /etc/ld.so.conf.d ]; then
   mkdir /etc/ld.so.conf.d
 fi
@@ -40,12 +44,6 @@ cat <<EOF > /etc/ld.so.conf.d/nvidia.conf
 /opt/nvidia/lib
 /opt/nvidia/lib32
 EOF
-
-if [ ! -f /etc/ld.so.conf ] || [ "$(grep 'include /etc/ld\.so\.conf\.d/\*\.conf' /etc/ld.so.conf )" = '' ]; then
-  cat <<EOF >> /etc/ld.so.conf
-include /etc/ld.so.conf.d/*.conf
-EOF
-fi
 
 ## Install the NVIDIA driver with advanced options below
 ## Note that --no-nvidia-modprobe is deleted so that CUDA could work correctly
