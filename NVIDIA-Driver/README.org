@@ -15,38 +15,45 @@
 *Note*: After the reboot the GUI desktop environment may not work, then you need press =Ctrl+Alt+F2= to enter =tty2=, from which you can log-in and proceed to the next step.
 
 *** 2. =install.sh=
-- Sets up =ld.so.conf= file to include libraries that are going to be installed by NVIDIA drivers, which are under =/opt/nvidia/lib= and
-  =/opt/nvidia/lib32=.
-- Locates NVIDIA driver installer , =NVIDIA-Linux-x86_64-<VERSION>.run=, under current directory.
+- Locates NVIDIA driver installer, =NVIDIA-Linux-x86_64-<VERSION>.run=, under current directory.
   - If there are multiple installer found, it chooses the newest one according to the version number.
   - If the installer is not found in current directory, then search in =~/Downloads= instead.
-  - If it's still not found, the download page would be open by the default web browser. Display adapters currently identified in the OS
-    would be displayed to assist the user in finding the right driver.
+  - If it's still not found, it will try to retrieve the latest version of NVIDIA driver for Linux x86-64 system.
+- Sets up =ld.so.conf= file to include libraries that are going to be installed by NVIDIA drivers, which are under =/opt/nvidia/lib= and
+  =/opt/nvidia/lib32=.
+- Add an =Xorg= configuration file, =/etc/X11/xorg.conf.d/nvidia-files-opt.conf=, to ask Xorg to search for additional modules under =/opt/nvidia=
 - Installs the driver with the following options:
   #+BEGIN_EXAMPLE
-       --utility-prefix=/opt/nvidia \
-       --opengl-prefix=/opt/nvidia \
-       --compat32-prefix=/opt/nvidia \
-       --compat32-libdir=lib32 \
-       --x-prefix=/opt/nvidia \
-       --documentation-prefix=/opt/nvidia \
-       --no-precompiled-interface \
-       --no-distro-scripts \
-       --force-libglx-indirect \
-       --dkms \
-       --silent
+  --utility-prefix=/opt/nvidia \
+  --opengl-prefix=/opt/nvidia \
+  --compat32-prefix=/opt/nvidia \
+  --compat32-libdir=lib32 \
+  --x-prefix=/opt/nvidia \
+  --x-module-path=/opt/nvidia/lib64/xorg/modules \
+  --x-library-path=/opt/nvidia/lib64 \
+  --x-sysconfig-path=/etc/X11/xorg.conf.d \
+  --documentation-prefix=/opt/nvidia \
+  --application-profile-path=/etc/nvidia \
+  --no-precompiled-interface \
+  --no-distro-scripts \
+  --force-libglx-indirect \
+  --glvnd-egl-config-path=/etc/glvnd/egl_vendor.d \
+  --dkms \
+  --silent
   #+END_EXAMPLE
   - I removed =--no-nvidia-modprobe= because it's needed for CUDA toolkit to work properly.
 - Before the actual installation, users will be reminded of running the =post_install.sh=, and they need to press a key to continue installation.
 
 *** 3. =post_install.sh=
 - Lists the NVIDIA kernel modules loaded on the system, which shall not be empty or otherwise the installation is not successful.
-- Calls =swupd verify --fix= to verify the integrity of OpenGL library, which is likely to be altered by NVIDIA installer.
+- Calls =swupd repair --quick --bundles=lib-opengl= to verify the integrity of OpenGL library, which is likely to be altered by NVIDIA installer.
 
 *** 4. =uninstall.sh=
 - Re-enables nouveau driver by moving them out of blacklist defined in =/etc/modprobe.d/disable-nouveau.conf=.
+- Restore dynamic linker configuration
+- Restore Xorg configuration
 - Uninstalls NVIDIA proprietary driver via the official uninstaller, =/opt/nvidia/bin/nvidia-uninstall=.
-- Remind the user to reboot after uninstallation.
+- Remind the user to reboot
 
 ** Known Issues
 - It's been reported that ~gnome-control-center~ will not work due to incorrect =libGL=[fn:1], but this could be fixed after running =swupd repair --quick --bundles==lib-opengl=, which is included in =post_install.sh=.
