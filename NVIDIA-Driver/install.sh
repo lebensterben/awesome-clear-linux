@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 
 ## Make sure to have root privilege
 if [ "$(whoami)" != 'root' ]; then
