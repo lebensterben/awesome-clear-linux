@@ -70,5 +70,5 @@
 -----
 
 #+BEGIN_SRC shell :exports results
-  echo "This file was last updated on" "$(date +"%Y/%M/%d")"
+  echo "This file was last updated on" "$(date +"%Y/%m/%d")"
 #+END_SRC

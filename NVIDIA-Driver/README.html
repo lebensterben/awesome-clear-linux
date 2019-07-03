@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-07-02 Tue 23:45 -->
+<!-- 2019-07-03 Wed 15:50 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Scripts for installing NVIDIA Proprietary Driver on Clear Linux</title>
@@ -248,21 +248,21 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org9310ed9">1. Introduction</a>
+<li><a href="#orgcd40d21">1. Introduction</a>
 <ul>
-<li><a href="#org507e82c">1.1. 1. <code>pre_install.sh</code></a></li>
-<li><a href="#orge0f9e45">1.2. 2. <code>install.sh</code></a></li>
-<li><a href="#orgb70be7a">1.3. 3. <code>post_install.sh</code></a></li>
-<li><a href="#org527d621">1.4. 4. <code>uninstall.sh</code></a></li>
+<li><a href="#orge379dd6">1.1. 1. <code>pre_install.sh</code></a></li>
+<li><a href="#org093c22e">1.2. 2. <code>install.sh</code></a></li>
+<li><a href="#org50b7d79">1.3. 3. <code>post_install.sh</code></a></li>
+<li><a href="#org50caefc">1.4. 4. <code>uninstall.sh</code></a></li>
 </ul>
 </li>
-<li><a href="#org07f123e">2. Known Issues</a></li>
+<li><a href="#org5249a2d">2. Known Issues</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org9310ed9" class="outline-2">
-<h2 id="org9310ed9"><span class="section-number-2">1</span> Introduction</h2>
+<div id="outline-container-orgcd40d21" class="outline-2">
+<h2 id="orgcd40d21"><span class="section-number-2">1</span> Introduction</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Based on the <a href="https://clearlinux.org/documentation/clear-linux/tutorials/nvidia">tutorial by Clear Linux</a>, I wrote four bash scripts that automate the installation, and uninstallation, of NVIDIA proprietary driver.
@@ -273,8 +273,8 @@ By design, all of them needs <code>root</code> privilege to be executed. Therefo
 </p>
 </div>
 
-<div id="outline-container-org507e82c" class="outline-3">
-<h3 id="org507e82c"><span class="section-number-3">1.1</span> 1. <code>pre_install.sh</code></h3>
+<div id="outline-container-orge379dd6" class="outline-3">
+<h3 id="orge379dd6"><span class="section-number-3">1.1</span> 1. <code>pre_install.sh</code></h3>
 <div class="outline-text-3" id="text-1-1">
 <ul class="org-ul">
 <li>Installs <code>kernel-native-dkms</code> or <code>kernel-lts-dkms</code> bundle based on your kernel type</li>
@@ -289,8 +289,8 @@ By design, all of them needs <code>root</code> privilege to be executed. Therefo
 </div>
 </div>
 
-<div id="outline-container-orge0f9e45" class="outline-3">
-<h3 id="orge0f9e45"><span class="section-number-3">1.2</span> 2. <code>install.sh</code></h3>
+<div id="outline-container-org093c22e" class="outline-3">
+<h3 id="org093c22e"><span class="section-number-3">1.2</span> 2. <code>install.sh</code></h3>
 <div class="outline-text-3" id="text-1-2">
 <ul class="org-ul">
 <li>Locates NVIDIA driver installer, <code>NVIDIA-Linux-x86_64-&lt;VERSION&gt;.run</code>, under current directory.
@@ -331,8 +331,8 @@ Installs the driver with the following options:
 </div>
 </div>
 
-<div id="outline-container-orgb70be7a" class="outline-3">
-<h3 id="orgb70be7a"><span class="section-number-3">1.3</span> 3. <code>post_install.sh</code></h3>
+<div id="outline-container-org50b7d79" class="outline-3">
+<h3 id="org50b7d79"><span class="section-number-3">1.3</span> 3. <code>post_install.sh</code></h3>
 <div class="outline-text-3" id="text-1-3">
 <ul class="org-ul">
 <li>Lists the NVIDIA kernel modules loaded on the system, which shall not be empty or otherwise the installation is not successful.</li>
@@ -341,8 +341,8 @@ Installs the driver with the following options:
 </div>
 </div>
 
-<div id="outline-container-org527d621" class="outline-3">
-<h3 id="org527d621"><span class="section-number-3">1.4</span> 4. <code>uninstall.sh</code></h3>
+<div id="outline-container-org50caefc" class="outline-3">
+<h3 id="org50caefc"><span class="section-number-3">1.4</span> 4. <code>uninstall.sh</code></h3>
 <div class="outline-text-3" id="text-1-4">
 <ul class="org-ul">
 <li>Re-enables nouveau driver by moving them out of blacklist defined in <code>/etc/modprobe.d/disable-nouveau.conf</code>.</li>
@@ -355,8 +355,8 @@ Installs the driver with the following options:
 </div>
 </div>
 
-<div id="outline-container-org07f123e" class="outline-2">
-<h2 id="org07f123e"><span class="section-number-2">2</span> Known Issues</h2>
+<div id="outline-container-org5249a2d" class="outline-2">
+<h2 id="org5249a2d"><span class="section-number-2">2</span> Known Issues</h2>
 <div class="outline-text-2" id="text-2">
 <ul class="org-ul">
 <li>It's been reported that <code>gnome-control-center</code> will not work due to incorrect <code>libGL</code><sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>, but this could be fixed after running <code>swupd repair --quick --bundles==lib-opengl</code>, which is included in <code>post_install.sh</code>.</li>
@@ -384,7 +384,7 @@ Installs the driver with the following options:
 <hr />
 
 <pre class="example">
-This file was last updated on 2019/45/02
+This file was last updated on 2019/07/03
 </pre></div></div>
 
 
@@ -392,7 +392,7 @@ This file was last updated on 2019/45/02
 </div></div>
 <div id="postamble" class="status">
 <p class="author">Author: Lucius Hu</p>
-<p class="date">Created: 2019-07-02 Tue 23:45</p>
+<p class="date">Created: 2019-07-03 Wed 15:50</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 <script>window.klipse_settings = {selector_eval_html: '.src-html',
