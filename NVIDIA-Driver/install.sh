@@ -65,7 +65,7 @@ echo -e "\e[33m\xe2\x8f\xb3 Installing NVIDIA proprietary Driver now ... \e[m"
 echo -e "\e[32mIf the installation is successful, GUI may automatically start.\e[m"
 echo -e "\e[32mPlease run the \e[33mpost_install.sh \e[32mto validate that the nvidia kernel modules are loaded.\e[m"
 echo -e "\e[32mThe version of the driver is \e[33m""$([[ "$INSTALLER" =~ ^.*\-(.*)\.run$ ]] && echo "${BASH_REMATCH[1]}")\e[m"
-read -p -r "Press any key to continue... " -n1 -s
+read -rp "Press any key to continue... " -n1 -s
 echo
 sh "$INSTALLER" \
    --utility-prefix=/opt/nvidia \
