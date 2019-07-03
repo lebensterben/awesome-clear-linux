@@ -73,9 +73,14 @@ sh "$INSTALLER" \
    --compat32-prefix=/opt/nvidia \
    --compat32-libdir=lib32 \
    --x-prefix=/opt/nvidia \
+   --x-module-path=/opt/nvidia/lib64/xorg/modules \
+   --x-library-path=/opt/nvidia/lib64 \
+   --x-sysconfig-path=/etc/X11/xorg.conf.d \
    --documentation-prefix=/opt/nvidia \
+   --application-profile-path=/etc/nvidia \
    --no-precompiled-interface \
    --no-distro-scripts \
    --force-libglx-indirect \
+   --glvnd-egl-config-path=/etc/glvnd/egl_vendor.d \
    --dkms \
    --silent
