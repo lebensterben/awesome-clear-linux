@@ -169,9 +169,14 @@
        - =zprofile= shall source =/usr/share/defaults/etc/profile=, and  this is how we ensure the consistency.
        - To sum up, we only needs to source =/usr/share/defaults/etc/profile= in =/usr/share/defaults/etc/zprofile=
    - Second, it provides additional features to interactive shells:
-     - Depending on the shell, the implementation of various functionalities would be slightly different. To determine the type of shell, we can use the following code block.
+     - Depending on the shell, the implementation of various functionalities would be slightly different. To determine the type of shell, we can use =$BASH_VERSION= and =$ZSH_VERSION= to determine whether current shell is ~bash~ or ~zsh~.
        #+BEGIN_SRC shell :exports both
          #!/usr/bin/sh
+         if [ -n "$BASH_VERSION" ]; then
+           echo "bash"
+         elif [ -n "ZSH_VERSION" ]; then
+           echo "zsh"
+
          case "$(ps -o args= $$ | sed -e 's# .*##' -e 's#.*/##')" in
            sh) echo 'sh';;
            bash) echo 'bash';;
@@ -182,11 +187,11 @@
      - The following test could determine whether a shell is interactive, which works for ~sh~, ~bash~, and ~zsh~. For example, when running the following code block as an shell script, it must be non-interactive. But if the /shebang/ specified the =-i= option to ~bash~, it forces the shell script to be executed by a interactive shell.
        #+BEGIN_SRC shell :exports both
          #!/usr/bin/bash
-         [ -n "$(echo $- | grep i)" ] && echo 'interactive' || echo 'non-interactive'
+         [ "$(expr $- : '.*i')" -ne 0 ] && echo 'interactive' || echo 'non-interactive'
        #+END_SRC
        #+BEGIN_SRC shell :exports both
          #!/usr/bin/bash -i
-         [ -n "$(echo $- | grep i)" ] && echo 'interactive' || echo 'non-interactive'
+         [ "$(expr $- : '.*i')" -ne 0 ] && echo 'interactive' || echo 'non-interactive'
        #+END_SRC
      - This is more reliable than checking the existence of environment variables such as =$BASH_VERSION= and =$ZSH_VERSION=. Consider the case where the parent process is a ~zsh~ shell, and the user launched a ~bash~ shell in ~zsh~, then both =$BASH_VERSION= and =$ZSH_VERSION= are available. Nevertheless, these version variables are helpful as some features maybe version-specific.
      - In particular, it's very easy to use the existing ~bash~ completions in ~zsh~ by executing the following first
@@ -197,9 +202,13 @@
        #+END_SRC
 2. Per-user defaults shall be left empty, but with information regarding the location of system-wide defaults in =/usr/share/defaults/etc/=, and the =/etc/= directory where system admins could override the system-wide defaults.
 
-** List of =clearlinux-pkgs= Involved
+** List of Changes in =clearlinux-pkgs=
+*** [[https://github.com/clearlinux-pkgs/gdm][gdm]]
+**** =Xsession=
+     1. =/usr/share/defaults/etc/profile= shall be sourced before =/etc/profile=.
+
 *** [[https://github.com/clearlinux-pkgs/lightdm][lightdm]]
-**** [[https://github.com/clearlinux-pkgs/lightdm/blob/master/0004-Add-lightdm-session.patch][0004-Add-lightdm-session.patch]]
+**** =lightdm-session=
      1. The sequence of profiles to be sourced shall be the consistent as =gdm=, which is =/etc/profile=, =/usr/share/defaults/etc/profile=, =$HOME/.profile=, =/etc/xprofile=, =$HOME/.xprofile=. Currently, the second one is missing.
 
 ** Limitations
