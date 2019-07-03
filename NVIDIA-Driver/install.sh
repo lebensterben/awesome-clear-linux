@@ -44,6 +44,8 @@ cat <<EOF > /etc/ld.so.conf.d/nvidia.conf
 /opt/nvidia/lib
 /opt/nvidia/lib32
 EOF
+echo -e "\e[32m Updating dynamic linker run-time bindings and library cache...\e[m"
+ldconfig
 
 ## Install the NVIDIA driver with advanced options below
 ## Note that --no-nvidia-modprobe is deleted so that CUDA could work correctly
