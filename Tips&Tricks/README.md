@@ -1,6 +1,6 @@
 ### Systemd Configs
 
-```
+```sh
 /etc/systemd/system.conf,
 /etc/systemd/system.conf.d/*.conf,
 /run/systemd/system.conf.d/*.conf,
@@ -9,7 +9,7 @@
 
 ### Post install
 
-```
+```sh
 # add ping and hexchat
 swupd bundle-add hexchat clr-network-troubleshooter
 
@@ -28,7 +28,7 @@ rm -rf /usr/share/xdg/autostart/org.clearlinux.initFlathubRepo.desktop
 
 ### Services
 
-```
+```sh
 # disable GNOME Software Autostart
 echo '#' > /usr/share/dbus-1/services/org.gnome.Software.service
 
@@ -36,7 +36,7 @@ echo '#' > /usr/share/dbus-1/services/org.gnome.Software.service
 echo 'Storage=none' > /etc/systemd/coredump.conf
 ```
 
-```
+```sh
 # use `systemctl cat .service` if not sure
 
 systemctl mask cupsd.service
@@ -64,7 +64,7 @@ systemctl enable fstrim.timer
 
 GNOME Clocks - hacky way to install:
 
-```
+```sh
 rpm -ivh --nodeps /tmp/gnome-clocks-3.32.0-1.fc30.x86_64.rpm
 ```
 
