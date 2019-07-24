@@ -51,6 +51,9 @@ if [ ! -f /etc/ld.so.conf ] || [ "$(grep 'include /etc/ld\.so\.conf\.d/\*\.conf'
 include /etc/ld.so.conf.d/*.conf
 EOF
 fi
+if [ ! -d /etc/ld.so.conf.d ]; then
+  mkdir /etc/ld.so.conf.d
+fi
 
 ## Install the NVIDIA CUDA Toolkit with advanced options below
 echo -e "\e[33m\xe2\x8f\xb3 Installing NVIDIA CUDA Toolkit now ...\e[m"
