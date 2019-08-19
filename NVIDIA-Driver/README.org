@@ -1,20 +1,31 @@
 #+TITLE: Scripts for installing NVIDIA Proprietary Driver on Clear Linux
 #+AUTHOR: Lucius Hu
 
-** Introduction
-   Based on the [[https://clearlinux.org/documentation/clear-linux/tutorials/nvidia][tutorial by Clear Linux]], I wrote four bash scripts that automate the installation, and uninstallation, of NVIDIA proprietary driver.
+** Summary
 
-   By design, all of them needs =root= privilege to be executed. Therefore there's no need to change their permission to make them executable.
+   Based on the [[https://clearlinux.org/documentation/clear-linux/tutorials/nvidia][tutorial by Clear Linux]], I wrote four bash scripts that automate the installation, update, and uninstallation, of NVIDIA proprietary driver.
 
-*** 1. =pre_install.sh=
+   By design, all of them needs =root= privilege to be executed. Therefore there's no need to change their permission to make them executable. To run a script, execute ~sudo bash ./<SCRIPT-NAME>.bash~
+
+   To *install* the driver, the user needs to execute =pre_install.bash=, =install.bash=, and =post_install.bash=, in that order, with reboots after executing the first two scripts.
+
+   Similarly, to *update* the driver, the user needs to execute =pre_update.bash=, =update.bash=, and =post_update.bash=, in the same manner.
+
+   To *uninstall* the driver, just execute =uninstall.bash=. This script is also helpful when installation/update failed, which helps to restore your system to the initial state.
+
+   Note that the uninstall script invokes the official installer to uninstall files from NVIDIA proprietary driver, and it should be sufficient. But incase something is left behind, the =cleaning.bash= script is provided, but normally you shouldn't execute it.
+
+** Detailed description for each script
+
+*** 1. =pre_install.bash=
 - Installs =kernel-native-dkms= or =kernel-lts-dkms= bundle based on your kernel type
 - Updates Clear Linux OS bootloader
 - Disables nouveau driver by blacklisting it in =/etc/modprobe.d/disable-nouveau.conf=
-- Reminds the user to reboot, and to run =install.sh= script to proceed to installation.
+- Reminds the user to reboot, and to run =install.bash= script to proceed to installation.
 
 *Note*: After the reboot the GUI desktop environment may not work, then you need press =Ctrl+Alt+F2= to enter =tty2=, from which you can log-in and proceed to the next step.
 
-*** 2. =install.sh=
+*** 2. =install.bash=
 - Locates NVIDIA driver installer, =NVIDIA-Linux-x86_64-<VERSION>.run=, under current directory.
   - If there are multiple installer found, it chooses the newest one according to the version number.
   - If the installer is not found in current directory, then search in =~/Downloads= instead.
@@ -42,20 +53,35 @@
   --silent
   #+END_EXAMPLE
   - I removed =--no-nvidia-modprobe= because it's needed for CUDA toolkit to work properly.
-- Before the actual installation, users will be reminded of running the =post_install.sh=, and they need to press a key to continue installation.
+- Before the actual installation, users will be reminded of running the =post_install.bash=, and they need to press a key to continue installation.
 
-*** 3. =post_install.sh=
+*** 3. =post_install.bash=
 - Lists the NVIDIA kernel modules loaded on the system, which shall not be empty or otherwise the installation is not successful.
 - Calls =swupd repair --quick --bundles=lib-opengl= to verify the integrity of OpenGL library, which is likely to be altered by NVIDIA installer.
 
-*** 4. =uninstall.sh=
+*** 4. =uninstall.bash=
 - Re-enables nouveau driver by moving them out of blacklist defined in =/etc/modprobe.d/disable-nouveau.conf=.
 - Restore dynamic linker configuration
 - Restore Xorg configuration
 - Uninstalls NVIDIA proprietary driver via the official uninstaller, =/opt/nvidia/bin/nvidia-uninstall=.
-- Remind the user to reboot
+- Remind the user to reboot.
 
-*** 5. =cleaning.sh=
+*** 5. =pre_update.bash=
+- Verify that NVIDIA proprietary driver is currently installed.
+- Retrieve the latest driver version and check that whether an update is needed.
+- If there's a updated version and the installer is not downloaded yet, download the installer.
+- Temprarily set the boot target to =multi-user.target=.
+- Remind the user to reboot and execute =update.bash=.
+
+*** 6. =update.bash=
+- Update the driver with the same options as =install.bash= has.
+- Restore the boot target to =graphical.target=.
+- Remind the user to reboot and execute =post_update.bash=.
+
+*** 7. =post_update.bash=
+- Same as =post_install.bash= with only minor differences in output messages.
+
+*** 8. =cleaning.bash=
 - Sometimes NVIDIA's official uninstaller still leaves certain files behind and this scripts will remove those files. One possible scenario is when the installer does not succeed.
   - =/opt/nvidia/=
   - =/usr/src/nvidia*/=, this is directory has source files of NVIDIA DKMS module
@@ -63,11 +89,12 @@
   - =/usr/lib/libGL.so.1=, though we specified library prefix, somehow this file exists
 
 ** Known Issues
-- It's been reported that ~gnome-control-center~ will not work due to incorrect =libGL=[fn:1], but this could be fixed after running =swupd repair --quick --bundles==lib-opengl=, which is included in =post_install.sh=.
+
+- It's been reported that ~gnome-control-center~ will not work due to incorrect =libGL=[fn:1], but this could be fixed after running =swupd repair --quick --bundles==lib-opengl=, which is included in =post_install.bash=.
 - If there is a integrated GPU on Intel Chip-set, the user has to disable the Intel VGA driver, or otherwise he will see the following error message[fn:2].
 #+DOWNLOADED: https://sjc1.discourse-cdn.com/business4/uploads/clearlinux/original/1X/e413fa015036c601ed4f717a4deed01a0c2ebf66.png @ 2019-05-26 04:06:21
 [[file:img/e413fa015036c601ed4f717a4deed01a0c2ebf66_2019-05-26_04-06-21.png]]
-- It's been reported that compilation of NVIDIA dkms module may fail due to =gcc= error, and the cause is unknown[fn:3]. When this happens, the Official uninstaller may left certain files behind. This is taken care by =cleaning.sh=.
+- It's been reported that compilation of NVIDIA dkms module may fail due to =gcc= error, and the cause is unknown[fn:3]. When this happens, the Official uninstaller may left certain files behind. This is taken care by =cleaning.bash=.
 
 ** Footnotes
 

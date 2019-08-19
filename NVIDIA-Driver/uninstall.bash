@@ -37,6 +37,10 @@ if [ -e /etc/X11/xorg.conf.d/nvidia-files-opt.conf ]; then
   rm /etc/X11/xorg.conf.d/nvidia-files-opt.conf
 fi
 
+## Set default boot target back to graphical target.
+echo -e "\e[33m\xe2\x8f\xb3 Set default boot target to \[32mgraphical.target\e[m."
+systemctl set-default graphical.target
+
 ## Ask the user whether he wants to reboot now
 echo -e "\e[32m Please reboot your system ASAP.\e[m"
 exit 0

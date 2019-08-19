@@ -44,7 +44,7 @@ if ! sh "$INSTALLER" \
 fi
 
 ## Set default boot target back to graphical target.
-echo -e "\e[33m\xe2\x8f\xb3 Set default boot target to \[32mmgraphicla\e[m."
+echo -e "\e[33m\xe2\x8f\xb3 Set default boot target to \[32mgraphical.target\e[m."
 systemctl set-default graphical.target
 
 ## Ask the user to reboot
