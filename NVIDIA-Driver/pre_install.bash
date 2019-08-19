@@ -34,5 +34,5 @@ options nouveau modeset=0
 EOF
 
 ## Ask the user whether he wants to reboot now
-echo -e "\e[32mPlease reboot your system ASAP and execute the \e[33minstall.sh \e[32mscript to install the NVIDIA proprietary driver.\e[m"
+echo -e "\e[32m Please reboot your system ASAP and execute the \e[33minstall.sh \e[32mscript to install the NVIDIA proprietary driver.\e[m"
 exit 0

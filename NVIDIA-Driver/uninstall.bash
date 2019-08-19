@@ -38,5 +38,5 @@ if [ -e /etc/X11/xorg.conf.d/nvidia-files-opt.conf ]; then
 fi
 
 ## Ask the user whether he wants to reboot now
-echo -e "\e[32mPlease reboot your system ASAP.\e[m"
+echo -e "\e[32m Please reboot your system ASAP.\e[m"
 exit 0

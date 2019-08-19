@@ -14,4 +14,8 @@ lsmod | grep ^nvidia
 echo -e "\e[33m\xe2\x8f\xb3 Verifying the integrity of OpenGL library files ...\e[m"
 swupd repair --quick --bundles=lib-opengl
 
+## Update flatpak runtime for the new NVIDIA driver
+echo -e "\e[33m\xe2\x8f\xb3 Updating the flatpak runtime ...\e[m"
+flatpak update -y
+
 echo -e "\e[32m\xf0\x9f\x91\x8f Installation completed!\e[m"
