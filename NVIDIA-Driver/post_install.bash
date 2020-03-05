@@ -6,6 +6,10 @@ if [ "$(whoami)" != 'root' ]; then
   exit 1
 fi
 
+## Link NVIDIA application profiles to where they are searched for
+echo -e "\e[33m\xe2\x8f\xb3 Optimizing Application Performance ...\e[m"
+ln -s /etc/nvidia /usr/share
+
 ## Validate that nvidia kernel modules are loaded
 echo -e "\e[33m\xe2\x8f\xb3 Making sure NVIDIA kernel modules are loaded ...\e[m"
 lsmod | grep ^nvidia
