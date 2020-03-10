@@ -1,13 +1,13 @@
-#+TITLE: Scripts for installing NVIDIA Proprietary Driver on Clear Linux
+#+TITLE: Scripts for NVIDIA Proprietary Driver on Clear Linux
 #+AUTHOR: Lucius Hu
 
 ** Summary
 
-   Based on the [[https://clearlinux.org/documentation/clear-linux/tutorials/nvidia][tutorial by Clear Linux]], I wrote four bash scripts that automate the installation, update, and uninstallation, of NVIDIA proprietary driver.
+   Based on the [[https://docs.01.org/clearlinux/latest/tutorials/nvidia.html][tutorial by Clear Linux]], I wrote several bash scripts that automate the installation, update, and uninstallation, of NVIDIA proprietary driver.
 
-   By design, all of them needs =root= privilege to be executed. Therefore there's no need to change their permission to make them executable. To run a script, execute ~sudo bash ./<SCRIPT-NAME>.bash~
+   There's no need to give them execute permission to make them executable. To run a script, execute ~bash ./<SCRIPT-NAME>.bash~ **WITHOU** ~sudo~.
 
-   To *install* the driver, the user needs to execute =pre_install.bash=, =install.bash=, and =post_install.bash=, in that order, with reboots after executing the first two scripts.
+   To *install* the driver, the user needs to execute =pre_install.bash=, =install.bash=, and =post_install.bash=, in that order, with reboots after executing the first script.
 
    Similarly, to *update* the driver, the user needs to execute =pre_update.bash=, =update.bash=, and =post_update.bash=, in the same manner.
 
@@ -18,8 +18,9 @@
 ** Detailed description for each script
 
 *** 1. =pre_install.bash=
-- Installs =kernel-native-dkms= or =kernel-lts-dkms= bundle based on your kernel type
-- Updates Clear Linux OS bootloader
+- For =Intel= system, disables =IOMMU= in the kernel.
+- Creates a systemd unit that fix problems regarding =libGL= library.
+- Installs =kernel-native-dkms= or =kernel-lts-dkms= bundle based on your kernel type, if not found.
 - Disables nouveau driver by blacklisting it in =/etc/modprobe.d/disable-nouveau.conf=
 - Reminds the user to reboot, and to run =install.bash= script to proceed to installation.
 
@@ -27,59 +28,62 @@
 
 *** 2. =install.bash=
 - Locates NVIDIA driver installer, =NVIDIA-Linux-x86_64-<VERSION>.run=, under current directory.
-  - If there are multiple installer found, it chooses the newest one according to the version number.
-  - If the installer is not found in current directory, then search in =~/Downloads= instead.
-  - If it's still not found, it will try to retrieve the latest version of NVIDIA driver for Linux x86-64 system.
-- Sets up =ld.so.conf= file to include libraries that are going to be installed by NVIDIA drivers, which are under =/opt/nvidia/lib= and
+  - If there are multiple installers found, chooses the latest.
+  - If no installer is found, tries to download the latest NVIDIA driver for Linux x86-64 system.
+- Modifies config file for dynamic linker, =/etc/ld.so.conf=, to include libraries of NVIDIA drivers, which are installed under =/opt/nvidia/lib= and
   =/opt/nvidia/lib32=.
-- Add an =Xorg= configuration file, =/etc/X11/xorg.conf.d/nvidia-files-opt.conf=, to ask Xorg to search for additional modules under =/opt/nvidia=
+- Modifies =Xorg= configuration file, =/etc/X11/xorg.conf.d/nvidia-files-opt.conf=, so that it search for additional modules under =/opt/nvidia/lib64/xorg/modules=
 - Installs the driver with the following options:
   #+BEGIN_EXAMPLE
-  --utility-prefix=/opt/nvidia \
-  --opengl-prefix=/opt/nvidia \
-  --compat32-prefix=/opt/nvidia \
-  --compat32-libdir=lib32 \
-  --x-prefix=/opt/nvidia \
-  --x-module-path=/opt/nvidia/lib64/xorg/modules \
-  --x-library-path=/opt/nvidia/lib64 \
-  --x-sysconfig-path=/etc/X11/xorg.conf.d \
-  --documentation-prefix=/opt/nvidia \
-  --application-profile-path=/etc/nvidia \
-  --no-precompiled-interface \
-  --no-distro-scripts \
-  --force-libglx-indirect \
-  --glvnd-egl-config-path=/etc/glvnd/egl_vendor.d \
-  --dkms \
+  --utility-prefix=/opt/nvidia
+  --opengl-prefix=/opt/nvidia
+  --compat32-prefix=/opt/nvidia
+  --compat32-libdir=lib32
+  --x-prefix=/opt/nvidia
+  --x-module-path=/opt/nvidia/lib64/xorg/modules
+  --x-library-path=/opt/nvidia/lib64
+  --x-sysconfig-path=/etc/X11/xorg.conf.d
+  --documentation-prefix=/opt/nvidia
+  --application-profile-path=/etc/nvidia/nvidia-application-profiles-rc.d
+  --no-precompiled-interface
+  --no-nvidia-modprobe
+  --no-distro-scripts
+  --force-libglx-indirect
+  --glvnd-egl-config-path=/etc/glvnd/egl_vendor.d
+  --egl-external-platform-config-path=/etc/egl/egl_external_platform.d
+  --dkms
   --silent
   #+END_EXAMPLE
-  - I removed =--no-nvidia-modprobe= because it's needed for CUDA toolkit to work properly.
-- Before the actual installation, users will be reminded of running the =post_install.bash=, and they need to press a key to continue installation.
+  - *Note*: In previous version of this script, I removed =--no-nvidia-modprobe= because it's needed for CUDA toolkit to work properly. I added it back since the [[https://docs.01.org/clearlinux/latest/tutorials/nvidia-cuda.html#using-the-nvidia-cuda-toolkit][official tutorial on CUDA]] solved this problem.
+- Before the actual installation, users will be reminded to run the =post_install.bash=, and they need to press a key to continue installation.
 
 *** 3. =post_install.bash=
-- Lists the NVIDIA kernel modules loaded on the system, which shall not be empty or otherwise the installation is not successful.
-- Calls =swupd repair --quick --bundles=lib-opengl= to verify the integrity of OpenGL library, which is likely to be altered by NVIDIA installer.
+- Checks the NVIDIA kernel modules are correctly loaded on the system, which shall not be empty or otherwise the installation is not successful.
+- Prompts the user whether to install a desktop file for =nvidia-settings=.
 
 *** 4. =uninstall.bash=
-- Re-enables nouveau driver by moving them out of blacklist defined in =/etc/modprobe.d/disable-nouveau.conf=.
-- Restore dynamic linker configuration
-- Restore Xorg configuration
+- Removes files created for IOMMU and OpenGL workarounds.
+- Re-enables nouveau driver by removing =/etc/modprobe.d/disable-nouveau.conf=.
+- Restores Xorg configuration
+- Restores dynamic linker configuration.
+- Removes the desktop file for =nvidia-settings= if it was created.
 - Uninstalls NVIDIA proprietary driver via the official uninstaller, =/opt/nvidia/bin/nvidia-uninstall=.
-- Remind the user to reboot.
+- Reminds the user to reboot.
 
 *** 5. =pre_update.bash=
-- Verify that NVIDIA proprietary driver is currently installed.
-- Retrieve the latest driver version and check that whether an update is needed.
-- If there's a updated version and the installer is not downloaded yet, download the installer.
+- Verifies that NVIDIA proprietary driver is currently installed and displays the current driver version.
+- Retrieve the latest driver version and check whether an update is needed.
+- If there's a update and the installer is not downloaded yet, download the installer.
 - Temprarily set the boot target to =multi-user.target=.
 - Remind the user to reboot and execute =update.bash=.
 
 *** 6. =update.bash=
 - Update the driver with the same options as =install.bash= has.
 - Restore the boot target to =graphical.target=.
-- Remind the user to reboot and execute =post_update.bash=.
 
 *** 7. =post_update.bash=
-- Same as =post_install.bash= with only minor differences in output messages.
+- Same as =post_install.bash= that checks NVIDIA kernel moduels are loaded.
+- Updates =flatpak= runtimes.
 
 *** 8. =cleaning.bash=
 - Sometimes NVIDIA's official uninstaller still leaves certain files behind and this scripts will remove those files. One possible scenario is when the installer does not succeed.
@@ -90,11 +94,11 @@
 
 ** Known Issues
 
-- It's been reported that ~gnome-control-center~ will not work due to incorrect =libGL=[fn:1], but this could be fixed after running =swupd repair --quick --bundles==lib-opengl=, which is included in =post_install.bash=.
+- It's been reported that ~gnome-control-center~ will not work due to incorrect =libGL=[fn:1], but this is fixed by the workarounds provided in =post_install.bash=.
 - If there is a integrated GPU on Intel Chip-set, the user has to disable the Intel VGA driver, or otherwise he will see the following error message[fn:2].
 #+DOWNLOADED: https://sjc1.discourse-cdn.com/business4/uploads/clearlinux/original/1X/e413fa015036c601ed4f717a4deed01a0c2ebf66.png @ 2019-05-26 04:06:21
 [[file:img/e413fa015036c601ed4f717a4deed01a0c2ebf66_2019-05-26_04-06-21.png]]
-- It's been reported that compilation of NVIDIA dkms module may fail due to =gcc= error, and the cause is unknown[fn:3]. When this happens, the Official uninstaller may left certain files behind. This is taken care by =cleaning.bash=.
++ It's been reported that compilation of NVIDIA dkms module may fail due to =gcc= error, and +the cause is unknown[fn:3]+ this is a known structural issue of NVIDIA driver[fn:4]. When this happens, the Official uninstaller may left certain files behind. This is taken care by =cleaning.bash=.
 
 ** Footnotes
 
@@ -103,6 +107,8 @@
 [fn:2] [[https://community.clearlinux.org/t/bash-scripts-to-automate-installation-of-nvidia-proprietary-driver/368/10?u=doct0rhu][Clear Linux Forums - Bash scripts to automate installation of NVIDIA proprietary driver]]
 
 [fn:3] [[https://github.com/clearlinux/distribution/issues/974#event-2458190851][GitHub Issue #974 - Error during compilation of NVIDIA dkms module]]
+
+[fn:4] [[https://github.com/clearlinux/distribution/issues/1725#issuecomment-585350294][GitHub Issue #1725 - not able to compile nvidia dkms module]]
 
 -----
 
