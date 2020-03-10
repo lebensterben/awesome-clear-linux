@@ -18,4 +18,7 @@
 	url = git@github.com:clearlinux/swupd-client.git
 [submodule "nvidia-xrun"]
 	path = nvidia-xrun
-	url = git@github.com:lebensterben/nvidia-xrun
+  url = git@github.com:lebensterben/nvidia-xrun
+[submodule "cnf"]
+  path = TidyShell/cnf
+  url = git@github.com:lebensterben/cnf.git
