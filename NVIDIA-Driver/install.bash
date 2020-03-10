@@ -59,7 +59,7 @@ EOF
 # Install the NVIDIA driver with advanced options below
 echo -e "\e[33m\xe2\x8f\xb3 Installing NVIDIA proprietary Driver now ... \e[m"
 echo -e "\e[32m If the installation is successful, GUI may automatically start.\e[m"
-echo -e "\e[32m Please run the \e[33mpost_install.sh \e[32mto validate that the nvidia kernel \
+echo -e "\e[32m Please run the \e[33mpost_install.bash \e[32mto validate that the nvidia kernel \
 modules are loaded.\e[m"
 echo -e "\e[32m The version of the driver is \e[33m""$([[ "$INSTALLER" =~ ^.*\-(.*)\.run$ ]] && \
 echo "${BASH_REMATCH[1]}")\e[m"
