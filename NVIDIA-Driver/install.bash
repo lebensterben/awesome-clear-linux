@@ -1,11 +1,5 @@
 #!/usr/bin/env bash
 
-# Make sure to have root privilege
-if [ "$(whoami)" != 'root' ]; then
-  echo -e "\e[31m\xe2\x9d\x8c Please retry with root privilege.\e[m"
-  exit 1
-fi
-
 # Locate the driver installer under current directory, or download one if not found
 echo -e "\e[33m\xe2\x8f\xb3 Locating NVIDIA-Linux-x86_64-<VERSION>.run ...\e[m"
 INSTALLER="$(find "$PWD" -maxdepth 1 -name 'NVIDIA-Linux-x86_64*\.run' | sort -r | head -1 )"
@@ -34,28 +28,28 @@ fi
 echo -e "\e[33m\xe2\x8f\xb3 Configuring dynamic linker configuration ...\e[m"
 if [ ! -f /etc/ld.so.conf ] || \
      [ "$(grep 'include /etc/ld\.so\.conf\.d/\*\.conf' /etc/ld.so.conf )" = '' ]; then
-  cat <<EOF >> /etc/ld.so.conf
+  cat <<EOF | sudo tee --append /etc/ld.so.conf > /dev/null
 include /etc/ld.so.conf.d/*.conf
 EOF
 fi
 if [ ! -d /etc/ld.so.conf.d ]; then
-  mkdir /etc/ld.so.conf.d
+  sudo mkdir /etc/ld.so.conf.d
 fi
 ## Write `/etc/ld.so.conf.d/nvidia.conf`
-cat <<EOF > /etc/ld.so.conf.d/nvidia.conf
+cat <<EOF | sudo tee /etc/ld.so.conf.d/nvidia.conf > /dev/null
 /opt/nvidia/lib
 /opt/nvidia/lib32
 EOF
 echo -e "\e[32m Updating dynamic linker run-time bindings and library cache ...\e[m"
-ldconfig
+sudo ldconfig
 
 # Configure Xorg to search for modules under /opt/nvidia
 echo -e "\e[33m\xe2\x8f\xb3 Configuring Xorg to search for additional module ...\e[m"
 if [ ! -d /etc/X11/xorg.conf.d ]; then
-  mkdir -p /etc/X11/xorg.conf.d
+  sudo mkdir -p /etc/X11/xorg.conf.d
 fi
 ## Write `/etc/X11/xorg.conf.d/nvidia-files-opt.conf`
-cat <<EOF > /etc/X11/xorg.conf.d/nvidia-files-opt.conf
+cat <<EOF | sudo tee /etc/X11/xorg.conf.d/nvidia-files-opt.conf > /dev/null
 Section "Files"
         ModulePath      "/usr/lib64/xorg/modules"
         ModulePath      "/opt/nvidia/lib64/xorg/modules"
@@ -71,7 +65,7 @@ echo -e "\e[32m The version of the driver is \e[33m""$([[ "$INSTALLER" =~ ^.*\-(
 echo "${BASH_REMATCH[1]}")\e[m"
 read -rp "Press any key to continue ... " -n1 -s
 echo
-if ! sh "$INSTALLER" \
+if ! sudo sh "$INSTALLER" \
     --utility-prefix=/opt/nvidia \
     --opengl-prefix=/opt/nvidia \
     --compat32-prefix=/opt/nvidia \
