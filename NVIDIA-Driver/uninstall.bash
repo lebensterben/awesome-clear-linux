@@ -1,46 +1,57 @@
 #!/usr/bin/env bash
 
-## Make sure to have root privilege
-if [ "$(whoami)" != 'root' ]; then
-  echo -e "\e[31m\xe2\x9d\x8c Please retry with root privilege.\e[m"
-  exit 1
-fi
+# Remove files created for workarounds
+echo -e "\e[33m\xe2\x8f\xb3 Removing files created for workarounds ...\e[m"
+for i in /etc/kernel/cmdline-removal.d \
+           /etc/systemd/system/fix-nvidia-libGL-trigger.service \
+           /etc/systemd/system/update-triggers.target.wants/fix-nvidia-libGL-trigger.service; do
+  if [ -f "$i" ]; then
+    echo -e "\e[33m Removing \e[32m$i\e[33m ...\e[m"
+    sudo rm $i
+  fi
+done
+sudo systemctl daemon-reload
 
-## Re-enable nouveau driver
-## The following two file names come from different editions of Clear tutorial
+# Re-enable nouveau driver
 echo -e "\e[33m\xe2\x8f\xb3 Re-enabling nouveau Driver ...\e[m"
+## The following two file names come from different editions of Clear tutorial
 for i in /etc/modprobe.d/disable-nouveau.conf /etc/modprobe.d/nvidia-disable-nouveau.conf ; do
   if [ -f "$i" ]; then
-    rm $i
+    echo -e "\e[33m Removing \e[32m$i\e[33m ...\e[m"
+    sudo rm $i
   fi
 done
 
-## Running nvidia-uninstall script (by NVIDIA) to uninstall the GPU driver
-echo -e "\e[33m\xe2\x8f\xb3 Running nvidia-uninstall ...\e[m"
-/opt/nvidia/bin/nvidia-uninstall
-
-## Remove NVIDIA libraries from dynamic linker configuration
-echo -e "\e[33m\xe2\x8f\xb3 Restoring dynamic linker configuration ...\e[m"
-sed -i '/^include \/etc\/ld\.so\.conf\.d\/\*\.conf$/d' /etc/ld.so.conf
-if [ -e /etc/ld.so.conf.d/nvidia.conf ]; then
-  rm /etc/ld.so.conf.d/nvidia.conf
-fi
-if [ -e /usr/share/X11/xorg.conf.d/nvidia-drm-outputclass.conf ]; then
-  rm /usr/share/X11/xorg.conf.d/nvidia-drm-outputclass.conf
-fi
-echo -e "\e[32m Updating dynamic linker run-time bindings and library cache...\e[m"
-ldconfig
-
-## Removing Xorg configuration file for NVIDIA driver
+# Remove Xorg configuration file for NVIDIA driver
 echo -e "\e[33m\xe2\x8f\xb3 Restoring Xorg configuration ...\e[m"
-if [ -e /etc/X11/xorg.conf.d/nvidia-files-opt.conf ]; then
-  rm /etc/X11/xorg.conf.d/nvidia-files-opt.conf
+for i in /etc/X11/xorg.conf.d/nvidia-files-opt.conf\
+           /usr/share/X11/xorg.conf.d/nvidia-drm-outputclass.conf; do
+  if [ -f "$i" ]; then
+    echo -e "\e[33m Removing \e[32m$i\e[33m ...\e[m"
+    sudo rm $i
+  fi
+done
+
+# Remove NVIDIA libraries from dynamic linker configuration
+echo -e "\e[33m\xe2\x8f\xb3 Restoring dynamic linker configuration ...\e[m"
+if [ -f /etc/ld.so.conf ]; then
+  sudo sed -i '/^include \/etc\/ld\.so\.conf\.d\/\*\.conf$/d' /etc/ld.so.conf
+fi
+if [ -e /etc/ld.so.conf.d/nvidia.conf ]; then
+  echo -e "\e[33m Removing \e[32m$i\e[33m ...\e[m"
+  sudo rm /etc/ld.so.conf.d/nvidia.conf
 fi
 
-## Set default boot target back to graphical target.
-echo -e "\e[33m\xe2\x8f\xb3 Set default boot target to \[32mgraphical.target\e[m."
-systemctl set-default graphical.target
+# Remove desktop file for `nvidia-settings` if it's installed
+if [ -f "$HOME"/.local/share/applications/nvidia-settings.desktop ]; then
+  echo -e "\e[33m\xe2\x8f\xb3 Removing desktop file for \e[32m\"nvidia-settings\"\e[33m ...\e[m"
+  unlink -v "$HOME"/.local/share/applications/nvidia-settings.desktop
+fi
 
-## Ask the user whether he wants to reboot now
+# Running nvidia-uninstall script (by NVIDIA) to uninstall the GPU driver
+echo -e "\e[33m\xe2\x8f\xb3 Running nvidia-uninstall ...\e[m"
+sudo /opt/nvidia/bin/nvidia-uninstall
+
+# Ask the user whether he wants to reboot now
 echo -e "\e[32m Please reboot your system ASAP.\e[m"
 exit 0
