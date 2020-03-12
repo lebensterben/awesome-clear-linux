@@ -2,7 +2,7 @@
 
 # Validate that nvidia kernel modules are loaded
 echo -e "\e[33m\xe2\x8f\xb3 Making sure NVIDIA kernel modules are loaded ...\e[m"
-if ! lsmod | grep ^nvidia; then
+if ! lsmod | grep '^nvidia '; then
   echo -e "\e[31m Cannot find NVIDIA modules, something went wrong!\e[m"
   exit 1
 fi
