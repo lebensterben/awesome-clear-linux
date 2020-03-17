@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 # Check GCC version compatibility
-GCC_VERSION="$(gcc --version | grep -o '[0-9]\.[0-9]\.[0-9] [0-9]\{8\}')"
-KERNEL_GCC_VERSION="$(grep -o '[0-9]\.[0-9]\.[0-9] [0-9]\{8\}' "/proc/version")"
+GCC_VERSION="$(gcc --version | grep -o '\([0-9]\+\.\?\)\{3\} [0-9]\{8\}')"
+KERNEL_GCC_VERSION="$(grep -o '\([0-9]\+\.\?\)\{3\} [0-9]\{8\}' "/proc/version")"
 if ! [ "$GCC_VERSION" = "$KERNEL_GCC_VERSION" ]; then
   echo -e "\e[31m\xe2\x9d\x8c The GCC used for compiling the kernel, $KERNEL_GCC_VERSION, is \
 different from the current GCC version, $GCC_VERSION.\e[m"
