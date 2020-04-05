@@ -49,7 +49,7 @@ sudo systemctl add-wants update-triggers.target fix-nvidia-libGL-trigger.service
 # Install Dynamic Kernel Module System (DKMS) if not found, according to kernel variant
 VARIANT="$(uname -r)" && VARIANT=${VARIANT##*.}
 case "$VARIANT" in
-  aws|lts|lts2018|native)
+  aws|lts|lts2018|lts2019|native)
     if ! sudo swupd bundle-list | grep -q kernel-"$VARIANT"-dkms; then
       echo -e "\e[33m\xe2\x8f\xb3 Installing Dynamic Kernel Module System ...\e[m"
       sudo swupd bundle-add kernel-"$VARIANT"-dkms
