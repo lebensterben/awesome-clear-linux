@@ -2,7 +2,7 @@
 
 # Remove files created for workarounds
 echo -e "\e[33m\xe2\x8f\xb3 Removing files created for workarounds ...\e[m"
-for i in /etc/kernel/cmdline-removal.d \
+for i in /etc/kernel/cmdline-removal.d/intel-iommu.conf \
            /etc/systemd/system/fix-nvidia-libGL-trigger.service \
            /etc/systemd/system/update-triggers.target.wants/fix-nvidia-libGL-trigger.service; do
   if [ -f "$i" ]; then
