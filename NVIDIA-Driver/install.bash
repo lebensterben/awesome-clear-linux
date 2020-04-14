@@ -1,12 +1,11 @@
 #!/usr/bin/env bash
 
-# Locate the driver installer under current directory, or download one if not found
+# Try to locate the driver installer under current directory, downlad on if not found
 echo -e "\e[33m\xe2\x8f\xb3 Locating NVIDIA-Linux-x86_64-<VERSION>.run ...\e[m"
 INSTALLER="$(find "$PWD" -maxdepth 1 -name 'NVIDIA-Linux-x86_64*\.run' | sort -r | head -1 )"
 if [ "$INSTALLER" = '' ]; then
   ## Cannot find installer, download one
-  echo -e "\e[31m\xe2\x9d\x8c Cannot find NVIDIA-Linux-x86_64-<VERSION>.run under current directory\
- or ~/Downloads\e[m"
+  echo -e "\e[31m\xe2\x9d\x8c Cannot find NVIDIA-Linux-x86_64-<VERSION>.run under current directory\e[m"
   LATEST="$(curl -s -L https://download.nvidia.com/XFree86/Linux-x86_64 | grep "<span class='dir'>"\
             | tail -n1 | sed -e "s/.*'>//" -e "s/\/<.*//" )"
   if [ -z "$LATEST" ]; then
