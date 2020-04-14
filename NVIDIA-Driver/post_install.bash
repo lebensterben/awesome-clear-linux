@@ -12,7 +12,7 @@ echo -e "\e[33m\xe2\x8f\xb3 Updating the flatpak runtime ...\e[m"
 flatpak update -y
 
 # Optionally ask user whether to add a desktop file for "nvidia-settings"
-if ! [ -f "$HOME"/.local/share/applications ]; then
+if ! [ -f "$HOME"/.local/share/applications/nvidia-settings.desktop ]; then
   read -rp "Do you want to add a desktop file for \"nvidia-settings\"? (Y/n)" -n1 -s
   echo
   if [ "$REPLY" = Y ]; then
@@ -20,3 +20,10 @@ if ! [ -f "$HOME"/.local/share/applications ]; then
   fi
 fi
 echo -e "\e[32m\xf0\x9f\x91\x8f Installation completed!\e[m"
+
+# Optionally ask user whether to delete NVIDIA installer(s)
+read -rp "Do you want to delete NVIDIA driver installer(s) in current directory? (Y/n)" -n1 -s
+echo
+if [ "$REPLY" = Y ]; then
+  find . -maxdepth 1 -name 'NVIDIA-Linux-x86_64*\.run' -printf "Removing %f\n" -delete
+fi
