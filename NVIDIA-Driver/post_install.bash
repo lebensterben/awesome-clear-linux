@@ -27,3 +27,5 @@ echo
 if [ "$REPLY" = Y ]; then
   find . -maxdepth 1 -name 'NVIDIA-Linux-x86_64*\.run' -printf "Removing %f\n" -delete
 fi
+
+echo -e "\e[32m\xf0\x9f\x91\x8f Installation completed!\e[m"
