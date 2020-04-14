@@ -3,7 +3,7 @@
 # Locate the NVIDIA Linux Driver installer
 # `NVIDIA-Linux-x86_64-<VERSION>.run` under current directory
 echo -e "\e[33m\xe2\x8f\xb3 Locating NVIDIA-Linux-x86_64-<VERSION>.run ...\e[m"
-INSTALLER="$(find "$PWD" -maxdepth 1 -name 'NVIDIA-Linux-x86_64*\.run' | sort -r | head -1 )"
+INSTALLER="$(find . -maxdepth 1 -name 'NVIDIA-Linux-x86_64*\.run' | sort -r | head -1 )"
 if [ -z "$INSTALLER" ];then
   echo -e "\e[31m Cannot find the installer.\e[m"
   echo -e "\e[31m Exiting ...\e[m"

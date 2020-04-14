@@ -28,7 +28,7 @@ if [ -z "$LATEST" ]; then
 else
   echo -e "\e[32m The latest version is \e[33m${LATEST}\e[m"
   if (( ${CURRENT%%.*} < ${LATEST%%.*} )) || (( ${CURRENT##*.} < ${LATEST##*.} )); then
-    if [ -f "${PWD}/NVIDIA-Linux-x86_64-${LATEST}.run" ]; then
+    if [ -f "./NVIDIA-Linux-x86_64-${LATEST}.run" ]; then
       echo -e "\e[32m The installer for the latest driver is already downloaded.\e[m"
     else
       echo -e "\e[32m Dowloading \e[33m${LATEST} \e[m..."
