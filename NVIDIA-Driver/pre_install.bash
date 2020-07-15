@@ -69,7 +69,7 @@ sudo clr-boot-manager update
 # Disable nouveau driver
 echo -e "\e[33m\xe2\x8f\xb3 Disabling nouveau Driver ...\e[m"
 if [ ! -d /etc/modprobe.d ]; then
-  sudo mkdir /etc/modprobe.d
+  sudo mkdir -p /etc/modprobe.d
 fi
 cat <<EOF | sudo tee /etc/modprobe.d/disable-nouveau.conf > /dev/null
 blacklist nouveau
