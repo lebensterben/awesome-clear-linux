@@ -26,7 +26,7 @@ fi
 # Configure the dynamic linker configuration to include /opt/nvidia/lib and /opt/nvidia/lib32
 echo -e "\e[33m\xe2\x8f\xb3 Configuring dynamic linker configuration ...\e[m"
 if [ ! -f /etc/ld.so.conf ] || \
-     [ "$(grep 'include /etc/ld\.so\.conf\.d/\*\.conf' /etc/ld.so.conf )" = '' ]; then
+     grep -q '^include /etc/ld\.so\.conf\.d/\*\.conf$' /etc/ld.so.conf; then
   cat <<EOF | sudo tee --append /etc/ld.so.conf > /dev/null
 include /etc/ld.so.conf.d/*.conf
 EOF
