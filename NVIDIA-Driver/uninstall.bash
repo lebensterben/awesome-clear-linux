@@ -34,9 +34,6 @@ done
 
 # Remove NVIDIA libraries from dynamic linker configuration
 echo -e "\e[33m\xe2\x8f\xb3 Restoring dynamic linker configuration ...\e[m"
-if [ -f /etc/ld.so.conf ]; then
-  sudo sed -i '/^include \/etc\/ld\.so\.conf\.d\/\*\.conf$/d' /etc/ld.so.conf
-fi
 if [ -e /etc/ld.so.conf.d/nvidia.conf ]; then
   echo -e "\e[33m Removing \e[32m$i\e[33m ...\e[m"
   sudo rm /etc/ld.so.conf.d/nvidia.conf
