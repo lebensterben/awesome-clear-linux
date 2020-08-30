@@ -1,3 +1,15 @@
+### Use swupd state in tmpfs to speedup update
+
+Very good solution if you use slow HDD or SSD, also can save some wear on SSD
+
+```sh
+# cp -r /var/lib/swupd /tmp/swupd
+# swupd update -S /tmp/swupd && swupd 3rd-party update -S /tmp/swupd
+# rm -rf /var/lib/swupd
+# mv /tmp/swupd /var/lib/swupd
+```
+
+
 ### Systemd Configs
 
 ```sh
