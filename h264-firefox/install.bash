@@ -42,8 +42,8 @@ fi
 if [ ! -d /etc/ld.so.conf.d ]; then
   sudo mkdir /etc/ld.so.conf.d
 fi
-if [ ! -f /etc/ld.so.conf.d/ffmpeg.conf ] && \
-  grep -q '/opt/ffmpeg/lib' /etc/ld.so.conf.d/ffmpeg.conf; then
+if [ ! -f /etc/ld.so.conf.d/ffmpeg.conf ] || \
+  ! grep -q '/opt/ffmpeg/lib' /etc/ld.so.conf.d/ffmpeg.conf; then
   echo "/opt/ffmpeg/lib" | sudo tee /etc/ld.so.conf.d/ffmpeg.conf
 fi
 echo -e "\e[32m Updating dynamic linker run-time bindings and library cache ...\e[m"
