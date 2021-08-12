@@ -11,6 +11,13 @@ fi
 echo -e "\e[33m\xe2\x8f\xb3 Updating the flatpak runtime ...\e[m"
 flatpak update -y
 
+# Fix Suspend/Resume Service Files
+echo -e "\e[33m\xe2\x8f\xb3 Modifying Nvidia Service Files ...\e[m"
+
+sudo sed -i 's|/usr/bin/nvidia-sleep.sh|/opt/nvidia/bin/nvidia-sleep.sh|g' /etc/systemd/system/systemd-suspend.service.requires/nvidia-suspend.service
+sudo sed -i 's|/usr/bin/nvidia-sleep.sh|/opt/nvidia/bin/nvidia-sleep.sh|g' /etc/systemd/system/systemd-suspend.service.requires/nvidia-resume.service
+
+sudo systemctl daemon-reload
 # Optionally ask user whether to add a desktop file for "nvidia-settings"
 if ! [ -f "$HOME"/.local/share/applications/nvidia-settings.desktop ]; then
   read -rp "Do you want to add a desktop file for \"nvidia-settings\"? (Y/n)" -n1 -s
