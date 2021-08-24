@@ -10,7 +10,7 @@ different from the current GCC version, $GCC_VERSION.\e[m"
 fi
 
 # Verify NVIDIA proprietary driver is installed and get current driver version
-CURRENT="$(awk 'NR==2{print $3}' <<< "$(/opt/nvidia/bin/nvidia-settings --version 2>/dev/null)")"
+CURRENT="$(awk 'NR==2{print $3}' <<<"$(/opt/nvidia/bin/nvidia-settings --version 2>/dev/null)")"
 if [ -z "$CURRENT" ]; then
   echo -e "\e[31m Cannot obtain current NVIDIA driver version, is it installed?\e[m"
   exit 1
@@ -19,15 +19,24 @@ else
 fi
 
 # Retrieve latest NVIDIA driver version, and download it if it doesn't exist
-LATEST="$(curl -L -s https://download.nvidia.com/XFree86/Linux-x86_64 | grep "<span class='dir'>" \
-| tail -n1 | sed -e "s/.*'>//" -e "s/\/<.*//" )"
+LATEST="$(curl -L -s https://download.nvidia.com/XFree86/Linux-x86_64 | grep "<span class='dir'>" |
+  tail -n1 | sed -e "s/.*'>//" -e "s/\/<.*//")"
 if [ -z "$LATEST" ]; then
   echo -e "\e[31m Cannot obtain latest NVIDIA driver version ...\e[m"
   echo -e "\e[32m Please Download the latest driver manually\e[m"
   exit 1
 else
   echo -e "\e[32m The latest version is \e[33m${LATEST}\e[m"
-  if (( ${CURRENT%%.*} < ${LATEST%%.*} )) || (( ${CURRENT##*.} < ${LATEST##*.} )); then
+  CURRENT_ARR=($(s:.:)CURRENT)
+  LATEST_ARR=($(s:.:)LATEST)
+  NEED_UPDATE=1
+  for (( i = 1; i <= ${#CURRENT_ARR}; i += 1)); do
+      if (( ${CURRENT_ARR[i] >= ${LATEST_ARR[i]}} )); then
+          NEED_UPDATE=0
+          break
+      fi
+  done
+  if (( NEED_UPDATE )); then
     if [ -f "./NVIDIA-Linux-x86_64-${LATEST}.run" ]; then
       echo -e "\e[32m The installer for the latest driver is already downloaded.\e[m"
     else
