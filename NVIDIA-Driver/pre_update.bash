@@ -27,11 +27,11 @@ if [ -z "$LATEST" ]; then
   exit 1
 else
   echo -e "\e[32m The latest version is \e[33m${LATEST}\e[m"
-  CURRENT_ARR=($(s:.:)CURRENT)
-  LATEST_ARR=($(s:.:)LATEST)
+  IFS='.' read -ra CURRENT_ARR <<< "$CURRENT"
+  IFS='.' read -ra LATEST_ARR <<< "$LATEST"
   NEED_UPDATE=1
-  for (( i = 1; i <= ${#CURRENT_ARR}; i += 1)); do
-      if (( ${CURRENT_ARR[i] >= ${LATEST_ARR[i]}} )); then
+  for (( i = 0; i <= ${#CURRENT_ARR}; i += 1)); do
+      if [ ${CURRENT_ARR[i]} -ge ${LATEST_ARR[i]} ]; then
           NEED_UPDATE=0
           break
       fi
