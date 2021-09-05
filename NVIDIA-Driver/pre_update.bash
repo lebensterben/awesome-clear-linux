@@ -27,16 +27,7 @@ if [ -z "$LATEST" ]; then
   exit 1
 else
   echo -e "\e[32m The latest version is \e[33m${LATEST}\e[m"
-  IFS='.' read -ra CURRENT_ARR <<< "$CURRENT"
-  IFS='.' read -ra LATEST_ARR <<< "$LATEST"
-  NEED_UPDATE=1
-  for (( i = 0; i <= ${#CURRENT_ARR}; i += 1)); do
-      if [ ${CURRENT_ARR[i]} -ge ${LATEST_ARR[i]} ]; then
-          NEED_UPDATE=0
-          break
-      fi
-  done
-  if (( NEED_UPDATE )); then
+  if [ "$(printf '%s\n' "$LATEST" "$CURRENT" | sort -V | head -n1)" != "$LATEST" ]; then
     if [ -f "./NVIDIA-Linux-x86_64-${LATEST}.run" ]; then
       echo -e "\e[32m The installer for the latest driver is already downloaded.\e[m"
     else
