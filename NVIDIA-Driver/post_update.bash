@@ -14,8 +14,12 @@ flatpak update -y
 # Fix Suspend/Resume Service Files
 echo -e "\e[33m\xe2\x8f\xb3 Modifying Nvidia Service Files ...\e[m"
 
-sudo sed -i 's|/usr/bin/nvidia-sleep.sh|/opt/nvidia/bin/nvidia-sleep.sh|g' /etc/systemd/system/systemd-suspend.service.requires/nvidia-suspend.service
-sudo sed -i 's|/usr/bin/nvidia-sleep.sh|/opt/nvidia/bin/nvidia-sleep.sh|g' /etc/systemd/system/systemd-suspend.service.requires/nvidia-resume.service
+for n in nvidia-suspend nvidia-resume nvidia-hibernate; do
+  path=/usr/lib/systemd/system/$n.service
+  if [ -f $path ]; then
+    sudo sed -i 's|/usr/bin/nvidia-sleep.sh|/opt/nvidia/bin/nvidia-sleep.sh|g' $path
+  fi
+done
 
 sudo systemctl daemon-reload
 
