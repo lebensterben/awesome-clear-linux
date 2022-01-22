@@ -35,7 +35,10 @@ BindsTo=update-triggers.target
 [Service]
 Type=oneshot
 ExecStart=/usr/bin/ln -sfv /opt/nvidia/lib/libGL.so.1 /usr/lib/libGL.so.1
-ExecStart=/usr/bin/ln -sfv /opt/nvidia/lib32/libGL.so.1 /usr/lib32/libGL.so.1
+ExecStart=/usr/bin/sh -c '/usr/bin/rm -fv /usr/lib64/libEGL.so* /usr/lib32/libEGL.so*'
+ExecStart=/usr/bin/sh -c '/usr/bin/rm -fv /usr/lib64/libGLESv1_CM.so* /usr/lib32/libGLESv1_CM.so*'
+ExecStart=/usr/bin/sh -c '/usr/bin/rm -fv /usr/lib64/libGLESv2.so* /usr/lib32/libGLESv2.so*'
+ExecStart=/usr/bin/sh -c '/usr/bin/rm -fv /usr/lib64/libGL.so* /usr/lib32/libGL.so*'
 EOF
 
 ## Reload systemd daemon to find the new service
