@@ -16,8 +16,8 @@ echo -e "\e[33m\xe2\x8f\xb3 Modifying Nvidia Service Files ...\e[m"
 
 for n in nvidia-suspend nvidia-resume nvidia-hibernate; do
   path=/usr/lib/systemd/system/$n.service
-  if [ -f $path ]; then
-    sudo sed -i 's|/usr/bin/nvidia-sleep.sh|/opt/nvidia/bin/nvidia-sleep.sh|g' $path
+  if [ -f "$path" ]; then
+    sudo sed -i 's|/usr/bin/nvidia-sleep.sh|/opt/nvidia/bin/nvidia-sleep.sh|g' "$path"
   fi
 done
 
