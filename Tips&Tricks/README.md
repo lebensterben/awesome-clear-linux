@@ -121,7 +121,7 @@ WantedBy=multi-user.target
 ```
 
 ```
-systemctl start powersave && systemclt enable powersave
+systemctl start powersave && systemctl enable powersave
 ```
 
 ```
@@ -133,10 +133,10 @@ clr-boot-manager update
 Powertop service:
 
 ```
-wget https://src.fedoraproject.org/rpms/powertop/raw/master/f/powertop.service
+wget https://src.fedoraproject.org/rpms/powertop/raw/main/f/powertop.service
 mv powertop.service /etc/systemd/system
 systemctl daemon-reload
-systemclt enable powertop
+systemctl enable powertop
 ```
 
 
