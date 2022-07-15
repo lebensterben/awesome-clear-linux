@@ -11,6 +11,18 @@ fi
 echo -e "\e[33m\xe2\x8f\xb3 Updating the flatpak runtime ...\e[m"
 flatpak update -y
 
+# Fix Suspend/Resume Service Files
+echo -e "\e[33m\xe2\x8f\xb3 Modifying Nvidia Service Files ...\e[m"
+
+for n in nvidia-suspend nvidia-resume nvidia-hibernate; do
+  path=/usr/lib/systemd/system/$n.service
+  if [ -f "$path" ]; then
+    sudo sed -i 's|/usr/bin/nvidia-sleep.sh|/opt/nvidia/bin/nvidia-sleep.sh|g' "$path"
+  fi
+done
+
+sudo systemctl daemon-reload
+
 # Optionally ask user whether to add a desktop file for "nvidia-settings"
 if ! [ -f "$HOME"/.local/share/applications/nvidia-settings.desktop ]; then
   read -rp "Do you want to add a desktop file for \"nvidia-settings\"? (Y/n)" -n1 -s
