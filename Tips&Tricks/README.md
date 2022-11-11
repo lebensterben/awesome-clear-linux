@@ -133,9 +133,6 @@ clr-boot-manager update
 Powertop service:
 
 ```
-wget https://src.fedoraproject.org/rpms/powertop/raw/main/f/powertop.service
-mv powertop.service /etc/systemd/system
-systemctl daemon-reload
 systemctl enable powertop
 ```
 
