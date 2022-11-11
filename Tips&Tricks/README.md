@@ -33,13 +33,22 @@ rm -rf /usr/share/xdg/autostart/org.clearlinux.initFlathubRepo.desktop
 ```
 
 ### Service tweaks
-```
-# disable GNOME Software autostart
-echo '#' > /usr/share/dbus-1/services/org.gnome.Software.service
 
-# disable coredump service
-ln -sf /dev/null /usr/lib/sysctl.d/50-coredump.conf
+- disable GNOME Software autostart
 ```
+echo '#' > /usr/share/dbus-1/services/org.gnome.Software.service
+```
+
+- disable coredump and debug services, make sure to enable them back for debug purposes
+
+```
+systemctl mask systemd-coredump.socket
+systemctl mask clr_debug_fuse.service
+systemctl mask clr_debug_daemon.service
+systemctl mask clr_debug_daemon.socket
+```
+
+- more services:
 ```
 systemctl mask cupsd.service
 systemctl mask mcelog.service
