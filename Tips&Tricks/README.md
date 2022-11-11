@@ -154,6 +154,13 @@ wifi.backend=iwd
 dns=systemd-resolved
 ```
 
+* Better privacy - disable connectivity checks:
+
+```
+[connectivity]
+enabled=false
+```
+
 ### DoT setup
 
 `vi /etc/systemd/resolved.conf.d/dns_over_tls.conf`
