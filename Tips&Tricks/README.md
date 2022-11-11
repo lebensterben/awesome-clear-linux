@@ -10,10 +10,7 @@
 Very good solution if you use slow HDD or SSD, also can save some wear on SSD
 
 ```bash
-# cp -r /var/lib/swupd /tmp/swupd
-# swupd update -S /tmp/swupd && swupd 3rd-party update -S /tmp/swupd
-# rm -rf /var/lib/swupd
-# mv /tmp/swupd /var/lib/swupd
+# swupd update -S /tmp/s && rm -rf /tmp/s
 ```
 
 ### Post install
